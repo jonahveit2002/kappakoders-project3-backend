@@ -1,5 +1,5 @@
 [Unit]
-Description=NodeJS Tutorial App
+Description=NodeJS Resume Builder
 After=network.target
  
 [Service]

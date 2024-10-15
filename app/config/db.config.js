@@ -8,7 +8,8 @@ module.exports = {
   USER: db_user,
   PASSWORD: db_pw,
   DB: db_name,
-  dialect: "mysql",
+  dialect: "mariadb",
+  port: 3306,
   pool: {
     max: 5,
     min: 0,
