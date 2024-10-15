@@ -1,8 +1,10 @@
 const dbConfig = require("../config/db.config.js");
 const Sequelize = require("sequelize");
+
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
+  port: dbConfig.port,
   pool: {
     max: dbConfig.pool.max,
     min: dbConfig.pool.min,
@@ -14,6 +16,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+/*
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.session = require("./session.model.js")(sequelize, Sequelize);
 db.tutorial = require("./tutorial.model.js")(sequelize, Sequelize);
@@ -54,5 +57,6 @@ db.lesson.belongsTo(
   { as: "tutorial" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+*/
 
 module.exports = db;
