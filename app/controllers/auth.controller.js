@@ -324,3 +324,46 @@ exports.logout = async (req, res) => {
     });
   }
 };
+
+exports.validateToken = async (req, res) => {
+  if (req.body.token === undefined || req.body.token === "") {
+    res.status(401).send({
+      message: "Token missing or invalid. Please provide a valid token.",
+      isValid: false,
+    });
+    return;
+  }
+
+  // Check if the token exists in the session table
+  let session = {};
+
+  await Session.findOne({ where: { token: req.body.token } })
+    .then((data) => {
+      if (data !== null) {
+        session = data.dataValues;
+        if (session.expirationDate > Date.now()) {
+          res.status(200).send({
+            message: "Valid token.",
+            isValid: true,
+          });
+        } else {
+          res.status(401).send({
+            message: "Token has expired.",
+            isValid: false,
+          });
+        }
+      } else {
+        res.status(401).send({
+          message: "Invalid token. Please provide a valid token.",
+          isValid: false,
+        });
+      }
+    })
+    .catch(() => {
+      res.status(500).send({
+        message: "Error occurred while retrieving session.",
+        isValid: false,
+      });
+    });
+};
+
