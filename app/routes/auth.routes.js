@@ -15,5 +15,5 @@ module.exports = (app) => {
   // Validate Token
   router.post("/validate", auth.validateToken);
 
-  app.use("/resume-builder-t1", router);
+  app.use("/resume-t1", router);
 };
