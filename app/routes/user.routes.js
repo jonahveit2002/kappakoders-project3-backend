@@ -21,5 +21,5 @@ module.exports = (app) => {
   // Delete all User
   router.delete("/", [authenticate], user.deleteAll);
 
-  app.use("/resume-builder/user", router);
+  app.use("/resume-t1/user", router);
 };

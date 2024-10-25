@@ -6,5 +6,5 @@ module.exports = (app) => {
   // Get all roles for user
   router.get("/user/:userId", [authenticate], userrole.findAllForUser);
 
-  app.use("/resume-builder-t1/user", router);
+  app.use("/resume-t1/user", router);
 };
