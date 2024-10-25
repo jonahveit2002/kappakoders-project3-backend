@@ -16,7 +16,49 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+db.user = require("./user.model.js")(sequelize, Sequelize);
+db.session = require("./session.model.js")(sequelize, Sequelize);
+db.role = require("./role.model.js")(sequelize, Sequelize);
+db.userRole = require("./userrole.model.js")(sequelize, Sequelize);
 
+// foreign key for session
+db.user.hasMany(
+  db.session,
+  { as: "session" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.session.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+/* foreign keys for relationship between role and user */
+
+db.user.hasMany(
+  db.userRole,
+  { as: "userRole" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.userRole.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.role.hasMany(
+  db.userRole,
+  { as: "userRole" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.userRole.belongsTo(
+  db.role,
+  { as: "role" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+/*
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.session = require("./session.model.js")(sequelize, Sequelize);
 
@@ -31,6 +73,6 @@ db.session.belongsTo(
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-
+*/
 
 module.exports = db;
