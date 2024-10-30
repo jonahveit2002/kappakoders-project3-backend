@@ -20,6 +20,7 @@ db.user = require("./user.model.js")(sequelize, Sequelize);
 db.session = require("./session.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
 db.userRole = require("./userrole.model.js")(sequelize, Sequelize);
+db.education = require("./education.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -58,6 +59,20 @@ db.userRole.belongsTo(
   { as: "role" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+
+// Relationship mapping for user - education relationship
+db.user.hasMany(
+  db.education,
+  { as: "education" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.education.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
 /*
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.session = require("./session.model.js")(sequelize, Sequelize);
