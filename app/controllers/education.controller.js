@@ -1,10 +1,9 @@
 const db = require("../models");
 const Education = db.education;
-const Session = db.session;
-const Op = db.Sequelize.Op;
+const utils = require("./utils/utils.js");
 
 exports.getAllForUser = async (req, res) => {
-  let userId = await getUserId(req);
+  let userId = await utils.getUserId(req);
   await Education.findAll({ where: { userId: userId } })
     .then((data) => {
       res.send(data);
@@ -41,7 +40,7 @@ exports.create = async (req, res) => {
     });
   }
 
-  userId = await getUserId(req);
+  userId = await utils.getUserId(req);
 
   const education = {
     institution: req.body.institution,
@@ -191,14 +190,4 @@ const validateEducationRequest = (data) => {
 
   // If no errors, return valid
   return { valid: true };
-};
-
-const getUserId = async (req) => {
-  let token = null;
-  let authHeader = req.get("authorization");
-  token = authHeader.slice(7);
-
-  const session = await Session.findOne({ where: { token: token } });
-
-  return session.userId;
 };

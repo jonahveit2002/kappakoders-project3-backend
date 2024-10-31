@@ -2,9 +2,10 @@ const db = require("../models");
 const Experience = db.experience;
 const Session = db.session;
 const Op = db.Sequelize.Op;
+const utils = require("./utils/utils.js");
 
 exports.getAllForUser = async (req, res) => {
-  let userId = await getUserId(req);
+  let userId = await utils.getUserId(req);
   await Experience.findAll({ where: { userId: userId } })
     .then((data) => {
       res.send(data);
@@ -42,7 +43,7 @@ exports.create = async (req, res) => {
     });
   }
 
-  userId = await getUserId(req);
+  userId = await utils.getUserId(req);
 
   const experience = {
     employer: req.body.employer,
@@ -173,14 +174,4 @@ const validateExperienceRequest = (data) => {
 
   // If no errors, return valid
   return { valid: true };
-};
-
-const getUserId = async (req) => {
-  let token = null;
-  let authHeader = req.get("authorization");
-  token = authHeader.slice(7);
-
-  const session = await Session.findOne({ where: { token: token } });
-
-  return session.userId;
 };
