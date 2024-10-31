@@ -3,15 +3,15 @@ module.exports = (app) => {
   const { authenticate } = require("../authorization/authorization.js");
   var router = require("express").Router();
 
-  router.get("/user/experience", [authenticate], experience.getAllForUser);
+  router.get("/experience", [authenticate], experience.getAllForUser);
 
-  router.get("/user/experience/:id", [authenticate], experience.getForId);
+  router.get("/experience/:id", [authenticate], experience.getForId);
 
-  router.post("/user/experience/", [authenticate], experience.create);
+  router.post("/experience/", [authenticate], experience.create);
 
-  router.put("/user/experience/:id", [authenticate], experience.update);
+  router.put("/experience/:id", [authenticate], experience.update);
 
-  router.delete("/user/experience/:id", [authenticate], experience.delete);
+  router.delete("/experience/:id", [authenticate], experience.delete);
 
-  app.use("/resume-t1", router);
+  app.use("/resume-t1/student", router);
 };

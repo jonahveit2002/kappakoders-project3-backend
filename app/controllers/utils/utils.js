@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require("../../models");
 const Session = db.session;
 
 exports.getUserId = async (req) => {
