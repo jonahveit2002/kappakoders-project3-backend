@@ -137,6 +137,15 @@ const validateSkillRequest = (data) => {
   }
 
   if (
+    data.description &&
+    (typeof data.description !== "string" || data.description.length > 45)
+  ) {
+    errors.push(
+      "Description must be a string with a maximum length of 45 characters."
+    );
+  }
+
+  if (
     data.proficiency_level !== null &&
     (typeof data.proficiency_level !== "string" ||
     data.proficiency_level.length > 100)
