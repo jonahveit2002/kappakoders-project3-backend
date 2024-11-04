@@ -1,7 +1,5 @@
 const db = require("../models");
 const Experience = db.experience;
-const Session = db.session;
-const Op = db.Sequelize.Op;
 const utils = require("./utils/utils.js");
 
 exports.getAllForUser = async (req, res) => {

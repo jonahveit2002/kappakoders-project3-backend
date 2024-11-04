@@ -22,6 +22,7 @@ db.role = require("./role.model.js")(sequelize, Sequelize);
 db.userRole = require("./userrole.model.js")(sequelize, Sequelize);
 db.education = require("./education.model.js")(sequelize, Sequelize);
 db.experience = require("./experience.model.js")(sequelize, Sequelize);
+db.project = require("./project.model.js")(sequelize, Sequelize);
 // foreign key for session
 db.user.hasMany(
   db.session,
@@ -81,6 +82,19 @@ db.user.hasMany(
 );
 
 db.experience.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// Relationship mapping for user - project relationship
+db.user.hasMany(
+  db.project,
+  { as: "project" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.project.belongsTo(
   db.user,
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
