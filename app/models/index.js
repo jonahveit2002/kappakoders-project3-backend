@@ -23,7 +23,9 @@ db.userRole = require("./userrole.model.js")(sequelize, Sequelize);
 db.education = require("./education.model.js")(sequelize, Sequelize);
 db.experience = require("./experience.model.js")(sequelize, Sequelize);
 db.project = require("./project.model.js")(sequelize, Sequelize);
-db.skill = require("./skill.model.js")(sequelize, Sequelize);
+db.skill = require("./skill.model.js")(sequelize, Sequelize);db.award = require("./award.model.js")(sequelize, Sequelize);
+
+
 
 // foreign key for session
 db.user.hasMany(
@@ -110,6 +112,19 @@ db.user.hasMany(
 );
 
 db.skill.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// Relationship mapping for user - award relationship
+db.user.hasMany(
+  db.award,
+  { as: "award" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.award.belongsTo(
   db.user,
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
