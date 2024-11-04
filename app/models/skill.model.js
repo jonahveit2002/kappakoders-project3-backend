@@ -1,27 +1,24 @@
 module.exports = (sequelize, Sequelize) => {
-  const Experience = sequelize.define("experience", {
+  const Skill = sequelize.define("skill", {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    employer: {
-      type: Sequelize.STRING(75),
-      allowNull: false,
-    },
-    position_title: {
+    name: {
       type: Sequelize.STRING(45),
-      allowNull: false,
+      allowNull: true,
     },
-    date_start: {
-      type: Sequelize.DATEONLY,
-      allowNull: false,
+    description: {
+      type: Sequelize.STRING(45),
+      allowNull: true,
     },
-    date_end: {
-      type: Sequelize.DATEONLY,
-      allowNull: false,
+    proficiency_level: {
+      type: Sequelize.STRING(100),
+      allowNull: true,
     },
   });
 
-  return Experience;
+  return Skill;
 };
+
