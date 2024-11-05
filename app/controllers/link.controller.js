@@ -1,9 +1,10 @@
 const db = require("../models");
-const Links = db.links;
+const Links = db.link;
 const utils = require("./utils/utils.js");
 
 exports.getAllForUser = async (req, res) => {
     let userId = await utils.getUserId(req);
+    console.log(userId);
     await Links.findAll({ where: { userId: userId } })
       .then((data) => {
         res.send(data);
@@ -42,6 +43,8 @@ exports.create = async (req, res) => {
     }
 
     userId = await utils.getUserId(req);
+
+    console.log(req.body);
 
     const link = {
         name: req.body.name,
@@ -143,5 +146,8 @@ const validateLinkRequest = (data) => {
         "URL is required and must be a string"
       );
     }
+
+      // If no errors, return valid
+  return { valid: true };
   };
   
