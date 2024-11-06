@@ -52,6 +52,8 @@ exports.create = async (req, res) => {
         userId: userId,
     }
 
+    console.log(link)
+
     await Links.create(link) 
         .then((data) => {
             res.send(data);

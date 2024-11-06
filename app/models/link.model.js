@@ -12,6 +12,11 @@ module.exports = (sequelize, Sequelize) => {
         url: {
             type: Sequelize.STRING(255),
             allownull: false,
+        },
+        userid: {
+            type: Sequelize.INTEGER,
+            allownull: false
+
         }
     });
 
