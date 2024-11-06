@@ -8,7 +8,7 @@ module.exports = (app) => {
   router.post("/", [authenticate], award.create);
 
   // Retrieve all awards
-  router.get("/user/:userId", [authenticate], award.findAllForUser);
+  router.get("/", [authenticate], award.findAllForUser);
 
   // Retrieve a single award with id
   router.get("/:id", [authenticate], award.findOne);
@@ -19,5 +19,5 @@ module.exports = (app) => {
   // Delete a award with id
   router.delete("/:id", [authenticate], award.delete);
 
-  app.use("/resume-t1/user/award", router);
+  app.use("/resume-t1/student/award", router);
 };

@@ -13,8 +13,12 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      dateAwarded: {
-        type: Sequelize.STRING
+      description: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      date_awarded: {
+        type: Sequelize.DATEONLY
       }
     });
   

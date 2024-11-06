@@ -1,13 +1,17 @@
 const db = require("../models");
+const utils = require("./utils/utils")
 const Award = db.award;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new User
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
-  if (!req.body.userId) {
-    res.status(400).send({
-      message: "userId cannot be null",
+
+  const userId = await utils.getUserId(req);
+
+  if (!userId) {
+    res.status(401).send({
+      message: "userId Not Found",
     });
     return;
   }
@@ -26,7 +30,7 @@ exports.create = (req, res) => {
     return;
   }
 
-  if (!req.body.dateAwarded) {
+  if (!req.body.date_awarded) {
     res.status(400).send({
       message: "dateAwarded cannot be null",
     });
@@ -35,10 +39,11 @@ exports.create = (req, res) => {
 
   // Create an award
   const award = {
-    userId: req.body.userId,
+    userId,
     institution: req.body.institution,
     name: req.body.name,
-    dateAwarded: req.body.dateAwarded,
+    date_awarded: req.body.date_awarded,
+    description: req.body.description,
   };
 
   // Save award in the database
@@ -54,8 +59,8 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all awards for a person from the database.
-exports.findAllForUser = (req, res) => {
-  const userId = req.params.userId
+exports.findAllForUser = async (req, res) => {
+  const userId = await utils.getUserId(req);
 
 
   Award.findAll({ where: {userId: userId} })
@@ -70,13 +75,18 @@ exports.findAllForUser = (req, res) => {
 };
 
 // Find a single Award with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
   const id = req.params.id;
+  const userId = await utils.getUserId(req);
 
   Award.findByPk(id)
     .then((data) => {
       if (data) {
-        res.send(data);
+        if(data.userId == userId){
+          res.send(data);
+        } else {
+          res.status(403).send({message: "Attempted access to another user's award"})
+        }
       } else {
         res.status(404).send({
           message: `Cannot find Award with id=${id}.`,
@@ -91,11 +101,12 @@ exports.findOne = (req, res) => {
 };
 
 // Update an Award by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const id = req.params.id;
+  const userId = await utils.getUserId(req);
 
   Award.update(req.body, {
-    where: { id: id },
+    where: { id: id, userId: userId },
   })
     .then((num) => {
       if (num == 1) {
@@ -104,7 +115,7 @@ exports.update = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot update Award with id=${id}. Maybe Award was not found or req.body is empty!`,
+          message: `Cannot update Award with id=${id} and userId=${userId}. Maybe Award was not found or req.body is empty!`,
         });
       }
     })
@@ -116,11 +127,12 @@ exports.update = (req, res) => {
 };
 
 // Delete an Award with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
+  const userId = await utils.getUserId(req);
 
   Award.destroy({
-    where: { id: id },
+    where: { id: id, userId: userId},
   })
     .then((num) => {
       if (num == 1) {
@@ -129,7 +141,7 @@ exports.delete = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot delete Award with id=${id}. Maybe Award was not found!`,
+          message: `Cannot delete Award with id=${id} and userId=${userId}. Maybe Award was not found!`,
         });
       }
     })
