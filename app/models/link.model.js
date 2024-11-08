@@ -13,12 +13,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING(255),
             allownull: false,
         },
-        userid: {
-            type: Sequelize.INTEGER,
-            allownull: false
-
-        }
     });
 
     return Link;
-};
+}; 

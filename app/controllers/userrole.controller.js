@@ -4,6 +4,8 @@ const Op = db.Sequelize.Op;
 
 exports.findAllForUser = async (req, res) => {
   const { userId } = req.params;
+  //UserRole findAll where userId is x
+  // Join Role based on Id
   await UserRole.findAllRolesForUser(userId)
     .then((data) => {
       res.send(data);

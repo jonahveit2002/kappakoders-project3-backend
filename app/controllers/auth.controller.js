@@ -1,8 +1,11 @@
 const db = require("../models");
 const authconfig = require("../config/auth.config");
 const User = db.user;
+const Role = db.roles;
 const Session = db.session;
 const Op = db.Sequelize.Op;
+
+
 
 const { google } = require("googleapis");
 
@@ -59,14 +62,25 @@ exports.login = async (req, res) => {
   let user = {};
   let session = {};
 
-  await User.findOne({
+  const chosenUser = await User.findOne({
     where: {
       email: email,
     },
+    include: [
+      {
+        model: db.userRole,
+        where: {
+          id: id
+        }
+      }
+    ]
+
   })
     .then((data) => {
       if (data != null) {
         user = data.dataValues;
+        console.log("THIS IS THE THING:", user)
+
       } else {
         // create a new User and save to database
         user = {
@@ -77,6 +91,8 @@ exports.login = async (req, res) => {
       }
     })
     .catch((err) => {
+      console.log("THIS IS THE ERROR:", err)
+
       res.status(500).send({ message: err.message });
     });
 
