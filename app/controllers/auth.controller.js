@@ -69,10 +69,16 @@ exports.login = async (req, res) => {
     include: [
       {
         model: db.userRole,
-        where: {
-          id: id
-        }
-      }
+        as: "userRole",
+        required: true,
+        include: [
+          {
+            model: db.role,
+            as: "role",
+            required: true
+          }
+        ],
+      },
     ]
 
   })
@@ -165,6 +171,8 @@ exports.login = async (req, res) => {
           session = {};
         } else {
           // if the session is still valid, then send info to the front end
+          console.log("THE USER IS THIS:", user);
+
           let userInfo = {
             email: user.email,
             fName: user.fName,
@@ -194,6 +202,7 @@ exports.login = async (req, res) => {
     });
     let tempExpirationDate = new Date();
     tempExpirationDate.setDate(tempExpirationDate.getDate() + 1);
+    console.log("THE USER IS THIS:", user);
     const session = {
       token: token,
       email: email,
