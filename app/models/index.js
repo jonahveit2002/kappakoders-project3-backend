@@ -27,6 +27,9 @@ db.skill = require("./skill.model.js")(sequelize, Sequelize);
 db.resume = require("./resume.model.js")(sequelize, Sequelize);
 db.template = require("./template.model.js")(sequelize, Sequelize);
 db.resumesection = require("./resumesection.model.js")(sequelize, Sequelize);
+db.award = require("./award.model.js")(sequelize, Sequelize);
+db.link = require("./link.model.js")(sequelize, Sequelize);
+
 
 // foreign key for session
 db.user.hasMany(
@@ -105,6 +108,20 @@ db.project.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
+// Relationship mapping for user - link relationship
+db.user.hasMany(
+  db.link,
+  { as: "link" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.link.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+
 // Relationship mapping for user - skill relationship
 db.user.hasMany(
   db.skill,
@@ -126,6 +143,18 @@ db.user.hasMany(
 );
 
 db.resume.belongsTo(
+    db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+// Relationship mapping for user - award relationship
+db.user.hasMany(
+  db.award,
+  { as: "award" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.award.belongsTo(
   db.user,
   { as: "user" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
@@ -156,22 +185,5 @@ db.resume.belongsTo(
   { as: "template" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-
-/*
-db.user = require("./user.model.js")(sequelize, Sequelize);
-db.session = require("./session.model.js")(sequelize, Sequelize);
-
-// foreign key for session
-db.user.hasMany(
-  db.session,
-  { as: "session" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-db.session.belongsTo(
-  db.user,
-  { as: "user" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-*/
 
 module.exports = db;
