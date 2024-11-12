@@ -70,7 +70,7 @@ exports.login = async (req, res) => {
       {
         model: db.userRole,
         as: "userRole",
-        required: true,
+        required: false,
         include: [
           {
             model: db.role,
