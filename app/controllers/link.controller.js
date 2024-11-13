@@ -49,7 +49,6 @@ exports.create = async (req, res) => {
     const link = {
         name: req.body.name,
         url: req.body.url,
-        userId: userId,
     }
 
     console.log(link)
