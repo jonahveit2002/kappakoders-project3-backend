@@ -43,7 +43,7 @@ jobs:
           SOURCE: "deploy/"
           REMOTE_HOST: "project3.eaglesoftwareteam.com"
           REMOTE_USER: ubuntu
-          TARGET: "nodeapps/resume-t1-backend"
+          TARGET: "nodeapps/2024/project3/t1/resume-t1-backend"
       - name: Execute SSH commmands on remote server
         uses: JimCronqvist/action-ssh@master
         env:
@@ -53,7 +53,7 @@ jobs:
           privateKey: ${{ secrets.SERVER_SSH_KEY }}
           debug: false
           command: |
-            cd nodeapps/resume-t1-backend
+            cd nodeapps/2024/project3/t1/resume-t1-backend
             npm install
             sudo systemctl stop resume-t1-backend
             sudo cp resume-t1-backend.service /lib/systemd/system/resume-t1-backend.service
