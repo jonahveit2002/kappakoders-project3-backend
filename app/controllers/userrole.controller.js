@@ -2,7 +2,7 @@ const db = require("../models");
 const UserRole = db.userRole;
 const Op = db.Sequelize.Op;
 
-export const findAllForUser = async (req, res) => {
+export const getAllForUser = async (req, res) => {
   const { userId } = req.params;
 
   try {
@@ -28,6 +28,7 @@ export const findAllForUser = async (req, res) => {
           }
     );
     res.status(200).json(userRoles);
+    res.send(userRoles);
   }  catch (error) {
     console.error("Error fetching user roles:", error);
     res.status(500).json({ message: "Error fetching user roles" });

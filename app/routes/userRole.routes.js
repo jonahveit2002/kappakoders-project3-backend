@@ -4,7 +4,7 @@ module.exports = (app) => {
   var router = require("express").Router();
 
   // Get all roles for user
-  router.get("/user/:userId", [authenticate], userrole.findAllForUser);
+  router.get("/user/:userId", [authenticate], userrole.getAllForUser);
 
   app.use("/resume-t1/user", router);
 };

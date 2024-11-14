@@ -35,7 +35,6 @@ require("./app/routes/experience.routes.js")(app);
 require("./app/routes/project.routes.js")(app);
 require("./app/routes/skill.routes.js")(app);
 
-
 require("./app/routes/award.routes")(app);
 
 // set port, listen for requests

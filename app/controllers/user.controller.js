@@ -1,5 +1,6 @@
 const db = require("../models");
 const User = db.user;
+const Role = db.role;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new User
@@ -39,7 +40,18 @@ exports.findAll = (req, res) => {
   const id = req.query.id;
   var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
 
-  User.findAll({ where: condition })
+  User.findAll({ 
+    where: condition,
+    include: [{
+      model: db.userRole,
+      as: "userRole",
+      required: false,
+      include: [{
+        model: db.role,
+        as: "role",
+      }]
+    }],
+  })
     .then((data) => {
       res.send(data);
     })
@@ -98,29 +110,54 @@ exports.findByEmail = (req, res) => {
 };
 
 // Update a User by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const id = req.params.id;
+  const { admin, ...userData } = req.body;
 
-  User.update(req.body, {
-    where: { id: id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "User was updated successfully.",
-        });
+  const transaction = await db.sequelize.transaction();
+  
+  try {
+    // Step 1: Update user data (without the admin flag)
+    await User.update(userData, {
+      where: { id: id },
+      transaction,
+    });
+
+
+    // Step 2: Handle admin role assignment if 'admin' flag is present in the request
+    if (typeof admin !== 'undefined') {
+      // Find the admin role to get the roleId
+      const role = await Role.findOne({ where: { type: 'admin' } });
+      if (!role) {
+        throw new Error("Admin role not found");
+      }
+
+      if (admin) {
+        // Add the admin role if 'admin' is true
+        await db.userRole.upsert({
+          userId: id,
+          roleId: role.id,
+        }, { transaction });
       } else {
-        res.send({
-          message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`,
+        // Remove the admin role if 'admin' is false
+        await db.userRole.destroy({
+          where: { userId: id, roleId: role.id },
+          transaction,
         });
       }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Error updating User with id=" + id,
-      });
-    });
+    }
+
+    // Commit transaction if all steps succeeded
+    await transaction.commit();
+    res.status(200).send({ message: "User updated successfully" });
+  } catch (error) {
+    // Rollback transaction if there’s an error
+    await transaction.rollback();
+    res.status(500).send({ message: "Error updating user", error: error.message });
+  }
 };
+
+
 
 // Delete a User with the specified id in the request
 exports.delete = (req, res) => {
