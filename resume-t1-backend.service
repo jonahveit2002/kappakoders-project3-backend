@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/nodeapps/resume-t1-backend/
+WorkingDirectory=/home/ubuntu/nodeapps/2024/project3/t1/resume-t1-backend/
 ExecStart=/usr/bin/npm run start
 Restart=on-failure
  
