@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --",
     "start": "node server.js",
-    "bundle": "mkdir deploy && cp -r app server.js package.json package-lock.json tutorial-backend.service .env deploy"
+    "bundle": "mkdir deploy && cp -r app server.js package.json package-lock.json resume-t1-backend.service .env deploy"
   },
   "keywords": [
     "node.js",

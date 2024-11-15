@@ -24,8 +24,12 @@ db.education = require("./education.model.js")(sequelize, Sequelize);
 db.experience = require("./experience.model.js")(sequelize, Sequelize);
 db.project = require("./project.model.js")(sequelize, Sequelize);
 db.skill = require("./skill.model.js")(sequelize, Sequelize);
+db.resume = require("./resume.model.js")(sequelize, Sequelize);
+db.template = require("./template.model.js")(sequelize, Sequelize);
+db.resumesection = require("./resumesection.model.js")(sequelize, Sequelize);
 db.award = require("./award.model.js")(sequelize, Sequelize);
 db.link = require("./link.model.js")(sequelize, Sequelize);
+
 
 // foreign key for session
 db.user.hasMany(
@@ -131,6 +135,18 @@ db.skill.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
+// Relationship mapping for user - resume relationship
+db.user.hasMany(
+  db.resume,
+  { as: "resume" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.resume.belongsTo(
+    db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
 // Relationship mapping for user - award relationship
 db.user.hasMany(
   db.award,
@@ -144,21 +160,30 @@ db.award.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-/*
-db.user = require("./user.model.js")(sequelize, Sequelize);
-db.session = require("./session.model.js")(sequelize, Sequelize);
+/* foreign keys for relationship between role and user */
 
-// foreign key for session
-db.user.hasMany(
-  db.session,
-  { as: "session" },
+db.resume.hasMany(
+  db.resumesection,
+  { as: "resumeSection" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.session.belongsTo(
-  db.user,
-  { as: "user" },
+
+db.resumesection.belongsTo(
+  db.resume,
+  { as: "resume" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-*/
+
+db.template.hasMany(
+  db.resume,
+  { as: "resume" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.resume.belongsTo(
+  db.template,
+  { as: "template" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
 
 module.exports = db;
