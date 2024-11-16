@@ -39,6 +39,7 @@ require("./app/routes/template.routes.js")(app);
 
 require("./app/routes/award.routes")(app);
 require("./app/routes/review.routes.js")(app);
+require("./app/routes/comment.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3011;

@@ -90,7 +90,15 @@ exports.update = async (req, res) => {
 
   await Review.update(review, { where: { id: reviewId } })
     .then((data) => {
-      res.send(data);
+      if (data[0] > 0) {
+        res.send({
+          message: `Successfully updated Review with id of ${req.params.id}!`,
+        });
+      } else {
+        res.send({
+          message: `Review with id of ${req.params.id} doesn't exist!`,
+        });
+      }
     })
     .catch((err) => {
       res.status(500).send({
@@ -102,7 +110,7 @@ exports.update = async (req, res) => {
 };
 
 exports.destroy = async (req, res) => {
-  await Review.destroy({ where: { id: req.params.id } })
+  await Resume.destroy({ where: { id: req.params.id } })
     .then((data) => {
       if (data == 1) {
         res.send({ message: "Review deleted successfully!" });

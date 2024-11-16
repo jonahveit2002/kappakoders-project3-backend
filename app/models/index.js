@@ -30,6 +30,7 @@ db.resumesection = require("./resumesection.model.js")(sequelize, Sequelize);
 db.award = require("./award.model.js")(sequelize, Sequelize);
 db.link = require("./link.model.js")(sequelize, Sequelize);
 db.review = require("./review.model.js")(sequelize, Sequelize);
+db.comment = require("./comment.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -195,6 +196,32 @@ db.resume.hasMany(
 db.review.belongsTo(
   db.resume,
   { as: "resume" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// Review and Comment relationship
+db.review.hasMany(
+  db.comment,
+  { as: "comment" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.comment.belongsTo(
+  db.review,
+  { as: "review" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+// Review and ResumeSection relationship
+db.resumesection.hasOne(
+  db.comment,
+  { as: "comment" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.comment.belongsTo(
+  db.resumesection,
+  { as: "resumeSection" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
