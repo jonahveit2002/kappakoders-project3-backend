@@ -36,9 +36,11 @@ require("./app/routes/project.routes.js")(app);
 require("./app/routes/skill.routes.js")(app);
 require("./app/routes/resume.routes.js")(app);
 require("./app/routes/template.routes.js")(app);
-
 require("./app/routes/award.routes")(app);
 require("./app/routes/professionalsummaries.routes.js")(app);
+
+//resumeItems
+require("./app/routes/resumeItems/skillitem.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3011;
