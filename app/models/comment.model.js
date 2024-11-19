@@ -1,19 +1,15 @@
 module.exports = (sequelize, Sequelize) => {
-  const Resume = sequelize.define("resume", {
+  const Comment = sequelize.define("comment", {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    metadata: {
-      type: Sequelize.JSON,
+    text: {
+      type: Sequelize.TEXT("long"),
       allowNull: false,
     },
   });
 
-  return Resume;
+  return Comment;
 };

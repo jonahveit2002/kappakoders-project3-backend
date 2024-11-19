@@ -117,6 +117,28 @@ exports.getForId = async (req, res) => {
     });
 };
 
+exports.getAllForUser = async (req, res) => {
+  const userId = await utils.getUserId(req);
+
+  await Resume.findAll({
+    where: { userId: userId },
+  })
+    .then((data) => {
+      const formattedData = data.map((resume) => {
+        const {metadata, ...formattedResume} = resume.dataValues;
+        return formattedResume;
+      })
+      res.send(formattedData);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          `An error occured while trying to retrieve resume with id of ${req.params.id}`,
+      });
+    });
+};
+
 const validateResume = (data) => {
   const errors = [];
 

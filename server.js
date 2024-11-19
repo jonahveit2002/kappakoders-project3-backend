@@ -7,7 +7,7 @@ const app = express();
 
 const db = require("./app/models");
 
-db.sequelize.sync({ alter: true });
+db.sequelize.sync({ force: true });
 
 var corsOptions = {
   origin: "http://localhost:8081",
@@ -29,6 +29,7 @@ app.get("/", (req, res) => {
 
 require("./app/routes/auth.routes.js")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/userRole.routes.js")(app);
 require("./app/routes/link.routes.js")(app);
 require("./app/routes/education.routes.js")(app);
 require("./app/routes/experience.routes.js")(app);
@@ -37,6 +38,8 @@ require("./app/routes/skill.routes.js")(app);
 require("./app/routes/resume.routes.js")(app);
 require("./app/routes/template.routes.js")(app);
 require("./app/routes/award.routes")(app);
+require("./app/routes/review.routes.js")(app);
+require("./app/routes/comment.routes.js")(app);
 require("./app/routes/professionalsummaries.routes.js")(app);
 require("./app/routes/resumesection.routes.js")(app);
 
