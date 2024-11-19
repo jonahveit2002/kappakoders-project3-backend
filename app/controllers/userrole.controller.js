@@ -1,10 +1,19 @@
 const db = require("../models");
 const UserRole = db.userRole;
-const Op = db.Sequelize.Op;
+const Role = db.role;
 
 exports.findAllForUser = async (req, res) => {
   const { userId } = req.params;
-  await UserRole.findAllRolesForUser(userId)
+  await UserRole.findAll({
+    where: { userId: userId },
+    include: [
+      {
+        model: Role,
+        required: true,
+        as: "role",
+      },
+    ],
+  })
     .then((data) => {
       res.send(data);
     })
