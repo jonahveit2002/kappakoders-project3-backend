@@ -36,7 +36,6 @@ db.professionalSummary = require("./professionalsummary.model.js")(
   Sequelize
 );
 
-
 // foreign key for session
 db.user.hasMany(
   db.session,
@@ -191,7 +190,6 @@ db.resume.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-
 db.resume.hasMany(
   db.professionalSummary,
   { as: "professionalSummary" },
@@ -231,13 +229,15 @@ db.comment.belongsTo(
 );
 
 // Review and ResumeSection relationship
+db.resumesection.hasOne(db.comment, {
+  foreignKey: { allowNull: false },
+  onDelete: "CASCADE",
+});
 db.comment.belongsTo(
   db.resumesection,
   { as: "resumeSection" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-<<<<<<< HEAD
-=======
 
 db.user.hasMany(
   db.professionalSummary,
@@ -251,5 +251,4 @@ db.professionalSummary.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
->>>>>>> 0bd4b5d59c5a3596fda907d3fc03a4b694073cff
 module.exports = db;
