@@ -38,6 +38,7 @@ require("./app/routes/resume.routes.js")(app);
 require("./app/routes/template.routes.js")(app);
 require("./app/routes/award.routes")(app);
 require("./app/routes/professionalsummaries.routes.js")(app);
+require("./app/routes/resumesection.routes.js")(app);
 
 //resumeItems
 require("./app/routes/resumeItems/skillitem.routes.js")(app);

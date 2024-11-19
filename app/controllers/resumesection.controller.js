@@ -1,8 +1,11 @@
 const db = require("../models");
 const ResumeSection = db.resumesection;
+const utils = require("./utils/utils.js");
 
-exports.getAllForResumeId = async (req, res) => {
-  await ResumeSection.findAll({ where: { resumeId: req.params.resumeId } })
+exports.getAllForUser = async (req, res) => {
+  const userId = await utils.getUserId(req);
+
+  await ResumeSection.findAll({ where: { userId: userId } })
     .then((data) => {
       res.send(data);
     })
@@ -10,7 +13,20 @@ exports.getAllForResumeId = async (req, res) => {
       res.status(500).send({
         message:
           err.message ||
-          `Something went wrong while trying to find ResumeSections with id of ${req.params.resumeId}`,
+          `An error occurred while retrieving resume sections for userId: ${userId}`,
+      });
+    });
+};
+
+exports.getForId = async (req, res) => {
+  await ResumeSection.findOne({ where: { id: req.params.id } })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || `An error occurred while retrieving the resume section.`,
       });
     });
 };
@@ -19,24 +35,32 @@ exports.create = async (req, res) => {
   const validation = validateResumeSection(req.body);
 
   if (!validation.valid) {
-    // Return an error message if validation fails
     return res.status(400).json({
       message: "Validation error",
       details: validation.errors,
     });
   }
 
+  const userId = await utils.getUserId(req);
+  console.log("You made it here");
+  console.log(userId);
+
   const resumeSection = {
-    ...req.body,
+    section_type: req.body.section_type,
+    section_id: req.body.section_id,
+    section_title: req.body.section_title,
+    userId: userId,
   };
 
   await ResumeSection.create(resumeSection)
-    .then((data) => res.send(data))
+    .then((data) => {
+      res.send(data);
+    })
     .catch((err) => {
       res.status(500).send({
         message:
           err.message ||
-          "Something went wrong will trying to create a Resume Section",
+          `An error occurred while trying to create a new resume section.`,
       });
     });
 };
@@ -45,7 +69,6 @@ exports.update = async (req, res) => {
   const validation = validateResumeSection(req.body);
 
   if (!validation.valid) {
-    // Return an error message if validation fails
     return res.status(400).json({
       message: "Validation error",
       details: validation.errors,
@@ -53,38 +76,20 @@ exports.update = async (req, res) => {
   }
 
   const resumeSection = {
-    ...req.body,
+    section_type: req.body.section_type,
+    section_id: req.body.section_id,
+    section_title: req.body.section_title,
   };
 
   await ResumeSection.update(resumeSection, { where: { id: req.params.id } })
     .then((data) => {
       if (data[0] > 0) {
         res.send({
-          message: `Successfully updated ResumeSection with id of ${req.params.id}!`,
+          message: `Successfully updated resume section with id ${req.params.id}!`,
         });
       } else {
         res.send({
-          message: `ResumeSection with id of ${req.params.id} doesn't exist!`,
-        });
-      }
-    })
-    .catch((err) =>
-      res.status(500).send({
-        message:
-          err.message ||
-          "Something went wrong will trying to update a Resume Section",
-      })
-    );
-};
-
-exports.delete = async (req, res) => {
-  await ResumeSection.destroy({ where: { id: req.params.id } })
-    .then((data) => {
-      if (data == 1) {
-        res.send({ message: "ResumeSection deleted successfully!" });
-      } else {
-        res.send({
-          message: `Cannot delete ResumeSection with id=${req.params.id}. Maybe ResumeSection was not found!`,
+          message: `Resume section with id ${req.params.id} doesn't exist!`,
         });
       }
     })
@@ -92,7 +97,27 @@ exports.delete = async (req, res) => {
       res.status(500).send({
         message:
           err.message ||
-          `An error ocurred while trying to delete ResumeSection with id of ${req.params.id}`,
+          `An error occurred while trying to update the resume section with id ${req.params.id}.`,
+      });
+    });
+};
+
+exports.delete = async (req, res) => {
+  await ResumeSection.destroy({ where: { id: req.params.id } })
+    .then((data) => {
+      if (data == 1) {
+        res.send({ message: "Resume section deleted successfully!" });
+      } else {
+        res.send({
+          message: `Cannot delete resume section with id=${req.params.id}. Maybe it was not found!`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          `An error occurred while trying to delete the resume section with id ${req.params.id}.`,
       });
     });
 };
@@ -114,7 +139,7 @@ const validateResumeSection = (data) => {
     );
   }
 
-  // Validate section_id (required and must be a positive integer)
+  // Validate section_id
   if (
     typeof data.section_id !== "number" ||
     data.section_id <= 0 ||
@@ -123,7 +148,7 @@ const validateResumeSection = (data) => {
     errors.push("Section ID is required and must be a positive integer.");
   }
 
-  // Validate section_title (required and must be a string with a max length of 75)
+  // Validate section_title
   if (
     !data.section_title ||
     typeof data.section_title !== "string" ||
@@ -134,11 +159,6 @@ const validateResumeSection = (data) => {
     );
   }
 
-  // Return errors if validation fails
-  if (errors.length > 0) {
-    return { valid: false, errors };
-  }
-
-  // If no errors, return valid
-  return { valid: true };
+  // Return validation result
+  return errors.length > 0 ? { valid: false, errors } : { valid: true };
 };
