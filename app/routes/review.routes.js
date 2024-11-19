@@ -6,11 +6,7 @@ module.exports = (app) => {
   } = require("../authorization/authorization.js");
   var router = require("express").Router();
 
-  router.get(
-    "/resume/:resumeId/review",
-    [authenticate, isAdmin],
-    review.getAll
-  );
+  router.get("/resume/:resumeId/review", [authenticate], review.getAll);
 
   router.get("/resume/review/:id", [authenticate, isAdmin], review.getForId);
 
