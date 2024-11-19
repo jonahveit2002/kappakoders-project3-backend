@@ -236,8 +236,6 @@ db.comment.belongsTo(
   { as: "resumeSection" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-<<<<<<< HEAD
-=======
 
 db.user.hasMany(
   db.professionalSummary,
@@ -251,5 +249,4 @@ db.professionalSummary.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
->>>>>>> 0bd4b5d59c5a3596fda907d3fc03a4b694073cff
 module.exports = db;
