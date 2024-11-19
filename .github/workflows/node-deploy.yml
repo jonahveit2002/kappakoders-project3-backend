@@ -30,6 +30,7 @@ jobs:
           echo DB_PW = "$DB_PW" >> .env
           echo DB_USER = "$DB_USER" >> .env
           echo DB_NAME = "$DB_NAME" >> .env
+          echo PORT = "3021" >> .env
           echo CLIENT_ID = "$CLIENT_ID" >> .env
           echo CLIENT_SECRET = "$CLIENT_SECRET" >> .env
 
@@ -43,7 +44,7 @@ jobs:
           SOURCE: "deploy/"
           REMOTE_HOST: "project3.eaglesoftwareteam.com"
           REMOTE_USER: ubuntu
-          TARGET: "nodeapps/resume-t1-backend"
+          TARGET: "nodeapps/2024/project3/t1/resume-t1-backend"
       - name: Execute SSH commmands on remote server
         uses: JimCronqvist/action-ssh@master
         env:
@@ -53,7 +54,7 @@ jobs:
           privateKey: ${{ secrets.SERVER_SSH_KEY }}
           debug: false
           command: |
-            cd nodeapps/resume-t1-backend
+            cd nodeapps/2024/project3/t1/resume-t1-backend
             npm install
             sudo systemctl stop resume-t1-backend
             sudo cp resume-t1-backend.service /lib/systemd/system/resume-t1-backend.service

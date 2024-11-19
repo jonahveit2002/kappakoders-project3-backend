@@ -31,6 +31,11 @@ db.award = require("./award.model.js")(sequelize, Sequelize);
 db.link = require("./link.model.js")(sequelize, Sequelize);
 db.review = require("./review.model.js")(sequelize, Sequelize);
 db.comment = require("./comment.model.js")(sequelize, Sequelize);
+db.professionalSummary = require("./professionalsummary.model.js")(
+  sequelize,
+  Sequelize
+);
+
 
 // foreign key for session
 db.user.hasMany(
@@ -186,6 +191,19 @@ db.resume.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
+
+db.resume.hasMany(
+  db.professionalSummary,
+  { as: "professionalSummary" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.professionalSummary.belongsTo(
+  db.resume,
+  { as: "resume" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
 // Review and Resume relationship
 db.resume.hasMany(
   db.review,
@@ -218,4 +236,20 @@ db.comment.belongsTo(
   { as: "resumeSection" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
+<<<<<<< HEAD
+=======
+
+db.user.hasMany(
+  db.professionalSummary,
+  { as: "professionalSummary" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+db.professionalSummary.belongsTo(
+  db.user,
+  { as: "user" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+
+>>>>>>> 0bd4b5d59c5a3596fda907d3fc03a4b694073cff
 module.exports = db;
