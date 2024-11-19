@@ -38,6 +38,8 @@ require("./app/routes/resume.routes.js")(app);
 require("./app/routes/template.routes.js")(app);
 
 require("./app/routes/award.routes")(app);
+require("./app/routes/review.routes.js")(app);
+require("./app/routes/comment.routes.js")(app);
 require("./app/routes/professionalsummaries.routes.js")(app);
 
 // set port, listen for requests
