@@ -44,19 +44,10 @@ exports.getForId = async (req, res) => {
 exports.create = async (req, res) => {
   const resumeId = req.params.resumeId;
 
-  const validation = validateReview(req.body);
-
-  if (!validation.valid) {
-    // Return an error message if validation fails
-    return res.status(400).json({
-      message: "Validation error",
-      details: validation.errors,
-    });
-  }
-
   const review = {
     resumeId,
-    ...req.body,
+    summary: "",
+    status: "in-review",
   };
 
   await Review.create(review)
@@ -74,7 +65,7 @@ exports.update = async (req, res) => {
   const resumeId = req.params.resumeId;
   const reviewId = req.params.id;
 
-  const validation = validateReview(req.body);
+  const validation = validateUpdate(req.body);
   if (!validation.valid) {
     // Return an error message if validation fails
     return res.status(400).json({
@@ -110,7 +101,7 @@ exports.update = async (req, res) => {
 };
 
 exports.destroy = async (req, res) => {
-  await Resume.destroy({ where: { id: req.params.id } })
+  await Review.destroy({ where: { id: req.params.id } })
     .then((data) => {
       if (data == 1) {
         res.send({ message: "Review deleted successfully!" });
@@ -129,12 +120,12 @@ exports.destroy = async (req, res) => {
     });
 };
 
-const validateReview = (data) => {
+const validateUpdate = (data) => {
   const errors = [];
 
   // Validate the status field
   const validStatuses = ["in-review", "completed"];
-  if (!data.status || !validStatuses.includes(data.status)) {
+  if (data.status && !validStatuses.includes(data.status)) {
     errors.push(
       `status is required and must be one of the following: ${validStatuses.join(
         ", "
@@ -143,10 +134,12 @@ const validateReview = (data) => {
   }
 
   // Validate the summary field
-  if (!data.summary || typeof data.summary !== "string") {
-    errors.push("summary is required and must be a string.");
-  } else if (data.summary.trim().length === 0) {
-    errors.push("summary cannot be empty or whitespace.");
+  if (data.summary && typeof data.summary !== "string") {
+    errors.push("summary must be a string.");
+  }
+
+  if (data.reviewId && typeof data.reviewId !== "number") {
+    errors.push("reviewId must be a number");
   }
 
   // Return validation results

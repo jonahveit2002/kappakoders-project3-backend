@@ -213,16 +213,9 @@ db.comment.belongsTo(
 );
 
 // Review and ResumeSection relationship
-db.resumesection.hasOne(
-  db.comment,
-  { as: "comment" },
-  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
-);
-
 db.comment.belongsTo(
   db.resumesection,
   { as: "resumeSection" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-
 module.exports = db;

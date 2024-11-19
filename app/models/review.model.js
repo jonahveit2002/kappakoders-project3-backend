@@ -8,10 +8,11 @@ module.exports = (sequelize, Sequelize) => {
     status: {
       type: Sequelize.ENUM(["in-review", "completed"]),
       allowNull: false,
+      default: "in-review",
     },
     summary: {
       type: Sequelize.TEXT("long"),
-      allowNull: false,
+      allowNull: true,
     },
   });
 
