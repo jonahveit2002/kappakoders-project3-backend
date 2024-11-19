@@ -1,27 +1,28 @@
 module.exports = (sequelize, Sequelize) => {
-    const SkillItem = sequelize.define("skillItem", {
+    const SkillItem = sequelize.define('SkillItem', {
         item_id: {
             type: Sequelize.INTEGER,
-            autoIncrement: true, 
-            primaryKey: true, 
+            primaryKey: true,
+            autoIncrement: true
         },
         skill_id: {
             type: Sequelize.INTEGER,
-            allowNull: false, 
-            references: {
-                model: 'skills', 
-                key: 'skill_id',
-            },
+            allowNull: false
         },
         section_id: {
             type: Sequelize.INTEGER,
-            allowNull: false, 
-            references: {
-                model: 'resumeSections', 
-                key: 'id',
-            },
+            allowNull: false
         },
+        createdAt: {
+            type: Sequelize.DATE,
+            allowNull: false
+        },
+        updatedAt: {
+            type: Sequelize.DATE,
+            allowNull: false
+        }
     });
+    
 
     return SkillItem;
 };

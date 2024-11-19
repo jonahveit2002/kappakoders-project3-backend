@@ -1,6 +1,6 @@
 module.exports = (app) => {
-    const skillItem = require("../controllers/skillItem.controller.js");
-    const { authenticate } = require("../authorization/authorization.js");
+    const skillItem = require("../../controllers/resumeItems/skillitem.controller.js");
+    const { authenticate } = require("../../authorization/authorization.js");
   
     const router = require("express").Router();
   

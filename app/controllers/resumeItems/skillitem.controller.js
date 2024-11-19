@@ -1,4 +1,4 @@
-const db = require("../models"); // Adjust the path if necessary
+const db = require("../../models"); // Adjust the path if necessary
 const SkillItem = db.SkillItem;
 
 // Create and Save a new SkillItem

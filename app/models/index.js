@@ -34,11 +34,11 @@ db.professionalSummary = require("./professionalsummary.model.js")(
   Sequelize
 );
 db.skillItem = require("./resumeItems/SkillItem.model.js")(sequelize, Sequelize);
-db.educationItem = require("./resumeItems/EducationItem.model.js")(sequelize, Sequelize);
-db.experienceItem = require("./resumeItems/ExperienceItem.model.js")(sequelize, Sequelize);
-db.projectItem = require("./resumeItems/ProjectItem.model.js")(sequelize, Sequelize);
-db.awardItem = require("./resumeItems/AwardItem.model.js")(sequelize, Sequelize);
-db.linkItem = require("./resumeItems/LinkItem.model.js")(sequelize, Sequelize);
+// db.educationItem = require("./resumeItems/EducationItem.model.js")(sequelize, Sequelize);
+// db.experienceItem = require("./resumeItems/ExperienceItem.model.js")(sequelize, Sequelize);
+// db.projectItem = require("./resumeItems/ProjectItem.model.js")(sequelize, Sequelize);
+// db.awardItem = require("./resumeItems/AwardItem.model.js")(sequelize, Sequelize);
+// db.linkItem = require("./resumeItems/LinkItem.model.js")(sequelize, Sequelize);
 
 
 // foreign key for session
@@ -221,41 +221,58 @@ db.professionalSummary.belongsTo(
 
 
 // resume Items relationships
+// skillItem belongs to skill
+db.skillItem.belongsTo(db.skill, {
+  as: "skill",
+  foreignKey: { name: "skill_id", allowNull: false },
+  onDelete: "CASCADE",
+});
+
+// ResumeSection has many skillItems
+db.resumesection.hasMany(db.skillItem, {
+  as: "skillItems",      // Plural to match the hasMany relationship
+  foreignKey: "section_id",  
+  onDelete: "CASCADE",    
+});
+
+// skillItem belongs to ResumeSection
 db.skillItem.belongsTo(db.resumesection, {
-  as: "resumeSection",
-  foreignKey: { name: "section_id", allowNull: false },
-  onDelete: "CASCADE",
+  as: "resumeSection",     
+  foreignKey: { name: "section_id", allowNull: false },  
+  onDelete: "CASCADE",       
 });
 
-db.educationItem.belongsTo(db.resumesection, {
-  as: "resumeSection",
-  foreignKey: { name: "section_id", allowNull: false },
-  onDelete: "CASCADE",
-});
 
-db.experienceItem.belongsTo(db.resumesection, {
-  as: "resumeSection",
-  foreignKey: { name: "section_id", allowNull: false },
-  onDelete: "CASCADE",
-});
 
-db.linkItem.belongsTo(db.resumesection, {
-  as: "resumeSection",
-  foreignKey: { name: "section_id", allowNull: false },
-  onDelete: "CASCADE",
-});
+// db.educationItem.belongsTo(db.resumesection, {
+//   as: "resumeSection",
+//   foreignKey: { name: "section_id", allowNull: false },
+//   onDelete: "CASCADE",
+// });
 
-db.projectItem.belongsTo(db.resumesection, {
-  as: "resumeSection",
-  foreignKey: { name: "section_id", allowNull: false },
-  onDelete: "CASCADE",
-});
+// db.experienceItem.belongsTo(db.resumesection, {
+//   as: "resumeSection",
+//   foreignKey: { name: "section_id", allowNull: false },
+//   onDelete: "CASCADE",
+// });
 
-db.skillItem.belongsTo(db.resumesection, {
-  as: "resumeSection",
-  foreignKey: { name: "section_id", allowNull: false },
-  onDelete: "CASCADE",
-});
+// db.linkItem.belongsTo(db.resumesection, {
+//   as: "resumeSection",
+//   foreignKey: { name: "section_id", allowNull: false },
+//   onDelete: "CASCADE",
+// });
+
+// db.projectItem.belongsTo(db.resumesection, {
+//   as: "resumeSection",
+//   foreignKey: { name: "section_id", allowNull: false },
+//   onDelete: "CASCADE",
+// });
+
+// db.skillItem.belongsTo(db.resumesection, {
+//   as: "resumeSection",
+//   foreignKey: { name: "section_id", allowNull: false },
+//   onDelete: "CASCADE",
+// });
 
 
 module.exports = db;
