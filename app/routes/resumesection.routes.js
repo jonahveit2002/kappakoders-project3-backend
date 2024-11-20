@@ -7,7 +7,14 @@ module.exports = (app) => {
   router.get(
     "/:resumeId/resumeSection",
     [authenticate],
-    resumeSection.getAllForUser // Should be updated to fit the logic of "getAllForResumeId" in the controller
+    resumeSection.getAllForResume 
+  );
+
+  // Get a specific resume section by ID
+  router.get(
+    "/:resumeId/resumeSection/:sectionId", 
+    [authenticate], 
+    resumeSection.getForId
   );
 
   // Create a new resume section for a specific resume
@@ -19,17 +26,13 @@ module.exports = (app) => {
 
   // Update a specific resume section by ID
   router.put(
-    "/:resumeId/resumeSection/:id",
+    "/:resumeId/resumeSection/:sectionId",
     [authenticate],
     resumeSection.update
   );
 
   // Delete a specific resume section by ID
-  router.delete(
-    "/:resumeId/resumeSection/:id",
-    [authenticate],
-    resumeSection.delete
-  );
+  router.delete("/:resumeId/resumeSection/:section_id", [authenticate], resumeSection.delete);
 
   app.use("/resume-t1/student/resume", router);
 };

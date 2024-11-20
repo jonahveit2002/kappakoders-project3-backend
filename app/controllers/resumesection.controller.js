@@ -2,33 +2,35 @@ const db = require("../models");
 const ResumeSection = db.resumesection;
 const utils = require("./utils/utils.js");
 
-exports.getAllForUser = async (req, res) => {
+exports.getAllForResume = async (req, res) => {
   const userId = await utils.getUserId(req);
+  console.log("I got here");
 
-  await ResumeSection.findAll({ where: { userId: userId } })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message ||
-          `An error occurred while retrieving resume sections for userId: ${userId}`,
-      });
+  try {
+    const data = await ResumeSection.findAll({ where: { resumeId:  req.params.resumeId} });
+    res.send(data);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || `An error occurred while retrieving resume sections for userId: ${userId}`,
     });
+  }
 };
 
 exports.getForId = async (req, res) => {
-  await ResumeSection.findOne({ where: { id: req.params.id } })
-    .then((data) => {
+  try {
+    const data = await ResumeSection.findOne({ where: { section_id: req.params.sectionId } });
+    if (data) {
       res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || `An error occurred while retrieving the resume section.`,
+    } else {
+      res.status(404).send({
+        message: `Resume section with id ${req.params.section_id} not found.`,
       });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || `An error occurred while retrieving the resume section.`,
     });
+  }
 };
 
 exports.create = async (req, res) => {
@@ -42,27 +44,23 @@ exports.create = async (req, res) => {
   }
 
   const userId = await utils.getUserId(req);
-  console.log("You made it here");
-  console.log(userId);
 
+  // Add resumeId to the data before creating the section
   const resumeSection = {
     section_type: req.body.section_type,
-    section_id: req.body.section_id,
     section_title: req.body.section_title,
+    resumeId: req.body.resumeId, // Include resumeId here
     userId: userId,
   };
 
-  await ResumeSection.create(resumeSection)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message ||
-          `An error occurred while trying to create a new resume section.`,
-      });
+  try {
+    const data = await ResumeSection.create(resumeSection); // Sequelize auto-generates section_id
+    res.send(data);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || `An error occurred while creating the resume section.`,
     });
+  }
 };
 
 exports.update = async (req, res) => {
@@ -75,51 +73,46 @@ exports.update = async (req, res) => {
     });
   }
 
+  // Include resumeId in case it's needed for updates (you can skip this if not necessary)
   const resumeSection = {
     section_type: req.body.section_type,
-    section_id: req.body.section_id,
     section_title: req.body.section_title,
+    resumeId: req.body.resumeId, // Include resumeId here if you want to update it
   };
 
-  await ResumeSection.update(resumeSection, { where: { id: req.params.id } })
-    .then((data) => {
-      if (data[0] > 0) {
-        res.send({
-          message: `Successfully updated resume section with id ${req.params.id}!`,
-        });
-      } else {
-        res.send({
-          message: `Resume section with id ${req.params.id} doesn't exist!`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message ||
-          `An error occurred while trying to update the resume section with id ${req.params.id}.`,
+  try {
+    const [updatedRows] = await ResumeSection.update(resumeSection, { where: { section_id: req.params.sectionId } });
+    if (updatedRows > 0) {
+      res.send({
+        message: `Successfully updated resume section with id ${req.params.sectionId}!`,
       });
+    } else {
+      res.status(404).send({
+        message: `Resume section with id ${req.params.sectionId} doesn't exist!`,
+      });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || `An error occurred while trying to update the resume section with id ${req.params.id}.`,
     });
+  }
 };
 
 exports.delete = async (req, res) => {
-  await ResumeSection.destroy({ where: { id: req.params.id } })
-    .then((data) => {
-      if (data == 1) {
-        res.send({ message: "Resume section deleted successfully!" });
-      } else {
-        res.send({
-          message: `Cannot delete resume section with id=${req.params.id}. Maybe it was not found!`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message ||
-          `An error occurred while trying to delete the resume section with id ${req.params.id}.`,
+  try {
+    const deletedRows = await ResumeSection.destroy({ where: { section_id: req.params.section_id } });
+    if (deletedRows === 1) {
+      res.send({ message: "Resume section deleted successfully!" });
+    } else {
+      res.status(404).send({
+        message: `Cannot delete resume section with id=${req.params.section_id}. Maybe it was not found!`,
       });
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || `An error occurred while trying to delete the resume section with id ${req.params.section_id}.`,
     });
+  }
 };
 
 const validateResumeSection = (data) => {
@@ -132,20 +125,12 @@ const validateResumeSection = (data) => {
     "project",
     "skill",
     "award",
+    "link",
   ];
   if (!data.section_type || !validSectionTypes.includes(data.section_type)) {
     errors.push(
       "Section type is required and must be one of: education, experience, project, skill, award."
     );
-  }
-
-  // Validate section_id
-  if (
-    typeof data.section_id !== "number" ||
-    data.section_id <= 0 ||
-    !Number.isInteger(data.section_id)
-  ) {
-    errors.push("Section ID is required and must be a positive integer.");
   }
 
   // Validate section_title

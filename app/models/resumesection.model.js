@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const ResumeSection = sequelize.define("resumeSection", {
-    id: {
+    section_id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
@@ -11,19 +11,17 @@ module.exports = (sequelize, Sequelize) => {
         "experience",
         "project",
         "skill",
-        "award"
+        "award",
+        "link"
       ),
       allowNull: false,
-    },
-    section_id: {
-      type: Sequelize.INTEGER,
-      required: true,
     },
     section_title: {
       type: Sequelize.STRING,
       allowNull: false,
     },
   });
+    
 
   return ResumeSection;
 };
