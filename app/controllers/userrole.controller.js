@@ -2,7 +2,7 @@ const db = require("../models");
 const UserRole = db.userRole;
 const Role = db.role;
 
-export const getAllForUser = async (req, res) => {
+const getAllForUser = async (req, res) => {
   const { userId } = req.params;
 
   try {
@@ -35,3 +35,5 @@ export const getAllForUser = async (req, res) => {
   }
 
 };
+
+module.exports = { getAllForUser };
