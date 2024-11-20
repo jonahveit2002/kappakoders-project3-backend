@@ -1,6 +1,6 @@
 const db = require("../models");
 const UserRole = db.userRole;
-const Op = db.Sequelize.Op;
+const Role = db.role;
 
 export const getAllForUser = async (req, res) => {
   const { userId } = req.params;

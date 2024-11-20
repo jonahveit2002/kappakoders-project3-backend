@@ -136,6 +136,35 @@ exports.login = async (req, res) => {
       });
   }
 
+  user.isAdmin = false;
+
+  await User.findOne({
+    where: {
+      id: user.id,
+    },
+    include: [
+      {
+        model: db.userRole,
+        as: "userRole",
+        include: [
+          {
+            model: db.role,
+            as: "role",
+          },
+        ],
+      },
+    ],
+  })
+    .then((data) => {
+      data.dataValues.userRole.forEach((userRole) => {
+        if (userRole.dataValues.role.dataValues.type == "Admin") {
+          user.isAdmin = true;
+        }
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   // try to find session first
 
   await Session.findOne({
@@ -178,6 +207,7 @@ exports.login = async (req, res) => {
             lName: user.lName,
             userId: user.id,
             token: session.token,
+            isAdmin: user.isAdmin,
             // refresh_token: user.refresh_token,
             // expiration_date: user.expiration_date
           };
@@ -219,6 +249,7 @@ exports.login = async (req, res) => {
           lName: user.lName,
           userId: user.id,
           token: token,
+          isAdmin: user.isAdmin,
           // refresh_token: user.refresh_token,
           // expiration_date: user.expiration_date
         };

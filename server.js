@@ -30,6 +30,7 @@ app.get("/", (req, res) => {
 
 require("./app/routes/auth.routes.js")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/userRole.routes.js")(app);
 require("./app/routes/link.routes.js")(app);
 require("./app/routes/education.routes.js")(app);
 require("./app/routes/experience.routes.js")(app);
@@ -39,6 +40,8 @@ require("./app/routes/resume.routes.js")(app);
 require("./app/routes/template.routes.js")(app);
 
 require("./app/routes/award.routes")(app);
+require("./app/routes/review.routes.js")(app);
+require("./app/routes/comment.routes.js")(app);
 require("./app/routes/professionalsummaries.routes.js")(app);
 
 // set port, listen for requests
