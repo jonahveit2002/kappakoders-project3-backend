@@ -45,6 +45,10 @@ require("./app/routes/resumesection.routes.js")(app);
 
 //resumeItems
 require("./app/routes/resumeItems/skillitem.routes.js")(app);
+require("./app/routes/resumeItems/experienceItem.routes.js")(app);
+require("./app/routes/resumeItems/educationItem.routes.js")(app);
+
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3011;
