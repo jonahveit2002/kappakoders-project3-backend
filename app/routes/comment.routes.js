@@ -8,27 +8,27 @@ module.exports = (app) => {
 
   router.get(
     "/resume/review/:reviewId/comment",
-    [authenticate, isAdmin],
+    [authenticate],
     comment.getAll
   );
 
   router.post(
-    "/resume/review/:reviewId/comment",
+    "/admin/resume/review/:reviewId/comment",
     [authenticate, isAdmin],
     comment.create
   );
 
   router.put(
-    "/resume/review/comment/:id",
+    "/admin/resume/review/comment/:id",
     [authenticate, isAdmin],
     comment.update
   );
 
   router.delete(
-    "/resume/review/comment/:id",
+    "/admin/resume/review/comment/:id",
     [authenticate, isAdmin],
     comment.destroy
   );
 
-  app.use("/resume-t1/student", router);
+  app.use("/resume-t1/", router);
 };

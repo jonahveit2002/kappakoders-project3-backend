@@ -39,6 +39,8 @@ exports.create = async (req, res) => {
     ...req.body,
   };
 
+  console.log(comment);
+
   await Comment.create(comment)
     .then((data) => res.send(data))
     .catch((err) => {
