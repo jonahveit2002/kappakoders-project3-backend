@@ -37,11 +37,26 @@ require("./app/routes/project.routes.js")(app);
 require("./app/routes/skill.routes.js")(app);
 require("./app/routes/resume.routes.js")(app);
 require("./app/routes/template.routes.js")(app);
-
 require("./app/routes/award.routes")(app);
 require("./app/routes/review.routes.js")(app);
 require("./app/routes/comment.routes.js")(app);
 require("./app/routes/professionalsummaries.routes.js")(app);
+require("./app/routes/resumesection.routes.js")(app);
+
+//resumeItems
+require("./app/routes/resumeItems/skillitem.routes.js")(app);
+require("./app/routes/resumeItems/experienceItem.routes.js")(app);
+require("./app/routes/resumeItems/educationItem.routes.js")(app);
+require("./app/routes/resumeItems/awardItem.routes.js")(app);
+require("./app/routes/resumeItems/linkItem.routes.js")(app);
+require("./app/routes/resumeItems/professionalSummaryItem.routes.js")(app);
+require("./app/routes/resumeItems/projectitem.routes.js")(app);
+
+
+
+
+
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3011;

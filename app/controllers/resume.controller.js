@@ -38,6 +38,8 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   const validation = validateResume(req.body);
 
+  console.log("Update Resume");
+
   if (!validation.valid) {
     // Return an error message if validation fails
     return res.status(400).json({
@@ -54,6 +56,7 @@ exports.update = async (req, res) => {
 
   await Resume.update(resume, { where: { id: req.params.id } })
     .then((data) => {
+      console.log("Testing");
       if (data[0] > 0) {
         res.send({
           message: `Successfully updated Resume with id of ${req.params.id}!`,
@@ -94,28 +97,32 @@ exports.delete = async (req, res) => {
 };
 
 exports.getForId = async (req, res) => {
-  await Resume.findOne({
-    where: { id: req.params.id },
-    include: [
-      { model: ResumeSection, as: "resumeSection" },
-      {
-        model: Template,
-        required: true,
-        as: "template",
-      },
-    ],
-  })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message ||
-          `An error occured while trying to retrieve resume with id of ${req.params.id}`,
-      });
+  try {
+    console.log("Fetching resume with ID:", req.params.id);
+
+    const data = await Resume.findOne({
+      where: { id: req.params.id },
+      include: [
+        { model: ResumeSection, as: "resumeSection" },
+        { model: Template, required: true, as: "template" },
+      ],
     });
+
+    if (!data) {
+      console.log("No resume found");
+      return res.status(404).send({ message: "Resume not found" });
+    }
+
+    console.log("Resume Data:", data);
+    res.json(data); // Ensure you're sending JSON response
+  } catch (err) {
+    console.error("Error fetching resume:", err);
+    res.status(500).send({
+      message: err.message || `An error occurred retrieving the resume.`,
+    });
+  }
 };
+
 
 exports.getAllForUser = async (req, res) => {
   const userId = await utils.getUserId(req);
@@ -124,20 +131,33 @@ exports.getAllForUser = async (req, res) => {
     where: { userId: userId },
   })
     .then((data) => {
-      const formattedData = data.map((resume) => {
-        const {metadata, ...formattedResume} = resume.dataValues;
-        return formattedResume;
-      })
-      res.send(formattedData);
+      // Return the data as is, including metadata
+      res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
         message:
           err.message ||
-          `An error occured while trying to retrieve resume with id of ${req.params.id}`,
+          `An error occurred while trying to retrieve resumes for user with id ${userId}`,
       });
     });
 };
+
+exports.getSectionsForResume = async (req, res) => {
+  const resumeId = req.params.resumeId;
+
+  try {
+    const sections = await ResumeSection.findAll({ where: { resumeId } });
+
+    // Send an empty array if no sections are found
+    res.status(200).send(sections || []);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || `Error retrieving sections for resumeId ${resumeId}.`,
+    });
+  }
+};
+
 
 const validateResume = (data) => {
   const errors = [];
@@ -151,11 +171,12 @@ const validateResume = (data) => {
       errors.push("metadata.render_fields must be an array of strings.");
     } else {
       const validFields = [
-        "awards",
+        "award",
         "education",
         "project",
-        "skills",
+        "skill",
         "experience",
+        "link"
       ];
       const invalidFields = data.metadata.render_fields.filter(
         (field) => !validFields.includes(field)
