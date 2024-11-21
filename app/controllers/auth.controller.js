@@ -85,7 +85,6 @@ exports.login = async (req, res) => {
     .then((data) => {
       if (data != null) {
         user = data.dataValues;
-        console.log("THIS IS THE THING:", user)
 
       } else {
         // create a new User and save to database
@@ -97,7 +96,7 @@ exports.login = async (req, res) => {
       }
     })
     .catch((err) => {
-      console.log("THIS IS THE ERROR:", err)
+      console.log("Error: ", err)
 
       res.status(500).send({ message: err.message });
     });
