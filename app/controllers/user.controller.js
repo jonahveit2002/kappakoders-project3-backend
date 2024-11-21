@@ -200,3 +200,26 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
+
+exports.getAllUserWithRoles = (req, res) => {
+  User.findAll({
+    include: [
+      {
+        model: UserRole,
+        as: "userRole",
+        include: [
+          {
+            model: Role,
+            as: "role",
+          },
+        ],
+      },
+    ],
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
