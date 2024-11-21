@@ -12,7 +12,8 @@ module.exports = (sequelize, Sequelize) => {
         "project",
         "skill",
         "award",
-        "link"
+        "link",
+        "professional_summary",
       ),
       allowNull: false,
     },

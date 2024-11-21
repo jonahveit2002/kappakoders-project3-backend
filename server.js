@@ -47,6 +47,14 @@ require("./app/routes/resumesection.routes.js")(app);
 require("./app/routes/resumeItems/skillitem.routes.js")(app);
 require("./app/routes/resumeItems/experienceItem.routes.js")(app);
 require("./app/routes/resumeItems/educationItem.routes.js")(app);
+require("./app/routes/resumeItems/awardItem.routes.js")(app);
+require("./app/routes/resumeItems/linkItem.routes.js")(app);
+require("./app/routes/resumeItems/professionalSummaryItem.routes.js")(app);
+require("./app/routes/resumeItems/projectitem.routes.js")(app);
+
+
+
+
 
 
 

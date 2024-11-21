@@ -1,11 +1,11 @@
 module.exports = (sequelize, Sequelize) => {
-    const AwardItem = sequelize.define('AwardItem', {
+    const ProjectItem = sequelize.define('ProjectItem', {
         item_id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        award_id: {
+        project_id: {
             type: Sequelize.INTEGER,
             allowNull: false
         },
@@ -24,5 +24,5 @@ module.exports = (sequelize, Sequelize) => {
     });
     
 
-    return AwardItem;
+    return ProjectItem;
 };

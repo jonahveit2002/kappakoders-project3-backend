@@ -126,10 +126,11 @@ const validateResumeSection = (data) => {
     "skill",
     "award",
     "link",
+    "professional_summary",
   ];
   if (!data.section_type || !validSectionTypes.includes(data.section_type)) {
     errors.push(
-      "Section type is required and must be one of: education, experience, project, skill, award."
+      "Section type is required and must be one of: education, experience, project, skill, award, link, or professional_summary"
     );
   }
 

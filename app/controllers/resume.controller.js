@@ -38,6 +38,8 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   const validation = validateResume(req.body);
 
+  console.log("Update Resume");
+
   if (!validation.valid) {
     // Return an error message if validation fails
     return res.status(400).json({
@@ -47,8 +49,6 @@ exports.update = async (req, res) => {
   }
 
   userId = await utils.getUserId(req);
-
-  console.log("testing");
 
   const resume = {
     ...req.body,
