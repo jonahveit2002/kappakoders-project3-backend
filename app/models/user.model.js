@@ -22,13 +22,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true,
     }
   
-    //   type: Sequelize.STRING(512),
-    //   allowNull: true
-    // },
-    // expiration_date: {
-    //   type: Sequelize.DATE,
-    //   allowNull: true
-    // },
+
   });
 
   return User;
