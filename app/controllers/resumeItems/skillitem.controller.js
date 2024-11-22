@@ -5,13 +5,14 @@ const SkillItem = db.skillItem;
 exports.create = async (req, res) => {
     try {
         const { skill_id } = req.body;
+        const { order } = req.body;
         const { sectionId } = req.params;
 
         if (!skill_id || !sectionId) {
             return res.status(400).send({ message: "Skill ID and Section ID are required!" });
         }
 
-        const skillItem = await SkillItem.create({ skill_id, section_id: sectionId });
+        const skillItem = await SkillItem.create({ skill_id, order, section_id: sectionId });
         res.status(201).send(skillItem);
     } catch (err) {
         console.error("Error creating SkillItem:", err);
@@ -52,7 +53,7 @@ exports.update = async (req, res) => {
     try {
         const { item_id } = req.params;
         const [updated] = await SkillItem.update(req.body, {
-            where: { id: item_id }, // Ensure you use the correct column name
+            where: { item_id: item_id }, // Ensure you use the correct column name
         });
 
         if (!updated) {

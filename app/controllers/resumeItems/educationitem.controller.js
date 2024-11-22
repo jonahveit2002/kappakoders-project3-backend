@@ -8,9 +8,6 @@ exports.create = async (req, res) => {
         const { order } = req.body;
         const { sectionId } = req.params;
 
-        console.log("Order: ")
-        console.log(order);
-
         if (!education_id || !sectionId) {
             return res.status(400).send({ message: "education ID and Section ID are required!" });
         }
@@ -54,11 +51,9 @@ exports.findOne = async (req, res) => {
 // Update a EducationItem by ID
 exports.update = async (req, res) => {
     try {
-        console.log(req.body);
-
         const { item_id } = req.params;
         const [updated] = await EducationItem.update(req.body, {
-            where: { id: item_id }, // Ensure you use the correct column name
+            where: { item_id: item_id }, // Ensure you use the correct column name
         });
 
         if (!updated) {
