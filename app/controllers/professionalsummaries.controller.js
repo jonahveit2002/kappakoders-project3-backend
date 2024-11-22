@@ -17,6 +17,22 @@ exports.getAllForUser = async (req, res) => {
     });
 };
 
+exports.getProfessionalSummaryForResume = async (req, res) => {
+  await ProfessionalSummary.findOne({
+    where: { resumeId: req.params.resumeId },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          `Some error ocurred while retrieving Professional Summary for resumeId:${req.params.resumeId}`,
+      });
+    });
+};
+
 exports.create = async (req, res) => {
   const validation = validateProfessionalSummary(req.body);
 
