@@ -22,7 +22,11 @@ exports.getProfessionalSummaryForResume = async (req, res) => {
     where: { resumeId: req.params.resumeId },
   })
     .then((data) => {
-      res.send(data);
+      if (data) {
+        res.send(data);
+      } else {
+        res.send({});
+      }
     })
     .catch((err) => {
       res.status(500).send({
