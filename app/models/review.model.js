@@ -14,6 +14,9 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.TEXT("long"),
       allowNull: true,
     },
+    completedBy: {
+      type: Sequelize.STRING,
+    },
   });
 
   return Review;
