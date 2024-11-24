@@ -1,5 +1,6 @@
 const db = require("../models");
 const Review = db.review;
+const Comment = db.comment;
 
 exports.getAll = async (req, res) => {
   const resumeId = req.params.resumeId;
@@ -8,6 +9,11 @@ exports.getAll = async (req, res) => {
     where: {
       resumeId: resumeId,
     },
+    include: [
+      {
+        model: Comment,
+      },
+    ],
   })
     .then((data) => {
       res.send(data);
