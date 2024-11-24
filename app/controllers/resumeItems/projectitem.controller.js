@@ -5,13 +5,14 @@ const ProjectItem = db.projectItem;
 exports.create = async (req, res) => {
     try {
         const { project_id } = req.body;
+        const { order } = req.body;
         const { sectionId } = req.params;
 
         if (!project_id || !sectionId) {
             return res.status(400).send({ message: "project ID and Section ID are required!" });
         }
 
-        const projectItem = await ProjectItem.create({ project_id, section_id: sectionId });
+        const projectItem = await ProjectItem.create({ project_id, order, section_id: sectionId });
         res.status(201).send(projectItem);
     } catch (err) {
         console.error("Error creating projectItem:", err);
@@ -52,7 +53,7 @@ exports.update = async (req, res) => {
     try {
         const { item_id } = req.params;
         const [updated] = await ProjectItem.update(req.body, {
-            where: { id: item_id }, // Ensure you use the correct column name
+            where: { item_id: item_id }, // Ensure you use the correct column name
         });
 
         if (!updated) {

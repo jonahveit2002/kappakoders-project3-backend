@@ -5,13 +5,14 @@ const EducationItem = db.educationItem;
 exports.create = async (req, res) => {
     try {
         const { education_id } = req.body;
+        const { order } = req.body;
         const { sectionId } = req.params;
 
         if (!education_id || !sectionId) {
             return res.status(400).send({ message: "education ID and Section ID are required!" });
         }
 
-        const educationItem = await EducationItem.create({ education_id, section_id: sectionId });
+        const educationItem = await EducationItem.create({ education_id, order, section_id: sectionId });
         res.status(201).send(educationItem);
     } catch (err) {
         console.error("Error creating educationItem:", err);
@@ -52,7 +53,7 @@ exports.update = async (req, res) => {
     try {
         const { item_id } = req.params;
         const [updated] = await EducationItem.update(req.body, {
-            where: { id: item_id }, // Ensure you use the correct column name
+            where: { item_id: item_id }, // Ensure you use the correct column name
         });
 
         if (!updated) {

@@ -5,13 +5,14 @@ const ExperienceItem = db.experienceItem;
 exports.create = async (req, res) => {
     try {
         const { experience_id } = req.body;
+        const { order } = req.body;
         const { sectionId } = req.params;
 
         if (!experience_id || !sectionId) {
             return res.status(400).send({ message: "experience ID and Section ID are required!" });
         }
 
-        const experienceItem = await ExperienceItem.create({ experience_id, section_id: sectionId });
+        const experienceItem = await ExperienceItem.create({ experience_id, order, section_id: sectionId });
         res.status(201).send(experienceItem);
     } catch (err) {
         console.error("Error creating experienceItem:", err);
@@ -52,7 +53,7 @@ exports.update = async (req, res) => {
     try {
         const { item_id } = req.params;
         const [updated] = await ExperienceItem.update(req.body, {
-            where: { id: item_id }, // Ensure you use the correct column name
+            where: { item_id: item_id }, // Ensure you use the correct column name
         });
 
         if (!updated) {

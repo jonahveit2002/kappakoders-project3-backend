@@ -5,13 +5,14 @@ const AwardItem = db.awardItem;
 exports.create = async (req, res) => {
     try {
         const { award_id } = req.body;
+        const { order } = req.body;
         const { sectionId } = req.params;
 
         if (!award_id || !sectionId) {
             return res.status(400).send({ message: "award ID and Section ID are required!" });
         }
 
-        const awardItem = await AwardItem.create({ award_id, section_id: sectionId });
+        const awardItem = await AwardItem.create({ award_id, order, section_id: sectionId });
         res.status(201).send(awardItem);
     } catch (err) {
         console.error("Error creating awardItem:", err);
@@ -52,7 +53,7 @@ exports.update = async (req, res) => {
     try {
         const { item_id } = req.params;
         const [updated] = await AwardItem.update(req.body, {
-            where: { id: item_id }, // Ensure you use the correct column name
+            where: { item_id: item_id }, // Ensure you use the correct column name
         });
 
         if (!updated) {

@@ -5,13 +5,14 @@ const LinkItem = db.linkItem;
 exports.create = async (req, res) => {
     try {
         const { link_id } = req.body;
+        const { order } = req.body;
         const { sectionId } = req.params;
 
         if (!link_id || !sectionId) {
             return res.status(400).send({ message: "link ID and Section ID are required!" });
         }
 
-        const linkItem = await LinkItem.create({ link_id, section_id: sectionId });
+        const linkItem = await LinkItem.create({ link_id, order, section_id: sectionId });
         res.status(201).send(linkItem);
     } catch (err) {
         console.error("Error creating linkItem:", err);
@@ -52,7 +53,7 @@ exports.update = async (req, res) => {
     try {
         const { item_id } = req.params;
         const [updated] = await LinkItem.update(req.body, {
-            where: { id: item_id }, // Ensure you use the correct column name
+            where: { item_id: item_id }, // Ensure you use the correct column name
         });
 
         if (!updated) {

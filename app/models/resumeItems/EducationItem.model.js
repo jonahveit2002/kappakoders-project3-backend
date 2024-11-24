@@ -13,6 +13,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false
         },
+        order: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
         createdAt: {
             type: Sequelize.DATE,
             allowNull: false
