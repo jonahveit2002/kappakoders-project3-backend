@@ -1,8 +1,11 @@
 const db = require("../models");
 const authconfig = require("../config/auth.config");
 const User = db.user;
+const Role = db.roles;
 const Session = db.session;
 const Op = db.Sequelize.Op;
+
+
 
 const { google } = require("googleapis");
 
@@ -59,14 +62,30 @@ exports.login = async (req, res) => {
   let user = {};
   let session = {};
 
-  await User.findOne({
+  const chosenUser = await User.findOne({
     where: {
       email: email,
     },
+    include: [
+      {
+        model: db.userRole,
+        as: "userRole",
+        required: false,
+        include: [
+          {
+            model: db.role,
+            as: "role",
+            required: true
+          }
+        ],
+      },
+    ]
+
   })
     .then((data) => {
       if (data != null) {
         user = data.dataValues;
+
       } else {
         // create a new User and save to database
         user = {
@@ -77,6 +96,8 @@ exports.login = async (req, res) => {
       }
     })
     .catch((err) => {
+      console.log("Error: ", err)
+
       res.status(500).send({ message: err.message });
     });
 
@@ -135,7 +156,7 @@ exports.login = async (req, res) => {
   })
     .then((data) => {
       data.dataValues.userRole.forEach((userRole) => {
-        if (userRole.dataValues.role.dataValues.type == "Admin") {
+        if (userRole.dataValues.role.dataValues.type == "admin") {
           user.isAdmin = true;
         }
       });
@@ -178,6 +199,7 @@ exports.login = async (req, res) => {
           session = {};
         } else {
           // if the session is still valid, then send info to the front end
+
           let userInfo = {
             email: user.email,
             fName: user.fName,

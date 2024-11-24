@@ -16,4 +16,4 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     return Link;
-};
+}; 
