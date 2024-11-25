@@ -4,14 +4,20 @@ const Skill = db.skill;
 
 // Create and Save a new SkillItem
 exports.create = async (req, res) => {
-  try {
-    const { skill_id } = req.body;
-    const { sectionId } = req.params;
+    try {
+        const { skill_id } = req.body;
+        const { order } = req.body;
+        const { sectionId } = req.params;
 
-    if (!skill_id || !sectionId) {
-      return res
-        .status(400)
-        .send({ message: "Skill ID and Section ID are required!" });
+        if (!skill_id || !sectionId) {
+            return res.status(400).send({ message: "Skill ID and Section ID are required!" });
+        }
+
+        const skillItem = await SkillItem.create({ skill_id, order, section_id: sectionId });
+        res.status(201).send(skillItem);
+    } catch (err) {
+        console.error("Error creating SkillItem:", err);
+        res.status(500).send({ message: err.message || "Some error occurred while creating the SkillItem." });
     }
 
     const skillItem = await SkillItem.create({
@@ -72,11 +78,11 @@ exports.findOne = async (req, res) => {
 
 // Update a SkillItem by ID
 exports.update = async (req, res) => {
-  try {
-    const { item_id } = req.params;
-    const [updated] = await SkillItem.update(req.body, {
-      where: { id: item_id }, // Ensure you use the correct column name
-    });
+    try {
+        const { item_id } = req.params;
+        const [updated] = await SkillItem.update(req.body, {
+            where: { item_id: item_id }, // Ensure you use the correct column name
+        });
 
     if (!updated) {
       return res

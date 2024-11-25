@@ -2,25 +2,36 @@ const db = require("../models");
 const UserRole = db.userRole;
 const Role = db.role;
 
-exports.findAllForUser = async (req, res) => {
+const getAllForUser = async (req, res) => {
   const { userId } = req.params;
-  await UserRole.findAll({
-    where: { userId: userId },
+
+
+  const user = await Users.findOne({
+    attributes: [
+      ['id', 'userId'],
+      ['fName', 'firstName'],
+      ['lName', 'lastName'],
+      ['email', 'userEmail'],
+      ['phoneNum', 'phoneNum'],
+    ],
     include: [
       {
-        model: Role,
-        required: true,
-        as: "role",
+        model: UserRoles,
+        attributes: [],
+        include: [
+          {
+            model: Roles,
+            attributes: [['type', 'roleId']],
+          },
+        ],
       },
     ],
-  })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving user roles.",
-      });
-    });
+    where: {
+      id: userId,
+    },
+    raw: true,
+  });
+
 };
+
+module.exports = { getAllForUser };

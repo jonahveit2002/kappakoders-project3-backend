@@ -4,14 +4,20 @@ const Experience = db.experience;
 
 // Create and Save a new experienceItem
 exports.create = async (req, res) => {
-  try {
-    const { experience_id } = req.body;
-    const { sectionId } = req.params;
+    try {
+        const { experience_id } = req.body;
+        const { order } = req.body;
+        const { sectionId } = req.params;
 
-    if (!experience_id || !sectionId) {
-      return res
-        .status(400)
-        .send({ message: "experience ID and Section ID are required!" });
+        if (!experience_id || !sectionId) {
+            return res.status(400).send({ message: "experience ID and Section ID are required!" });
+        }
+
+        const experienceItem = await ExperienceItem.create({ experience_id, order, section_id: sectionId });
+        res.status(201).send(experienceItem);
+    } catch (err) {
+        console.error("Error creating experienceItem:", err);
+        res.status(500).send({ message: err.message || "Some error occurred while creating the experienceItem." });
     }
 
     const experienceItem = await ExperienceItem.create({
@@ -82,11 +88,11 @@ exports.findOne = async (req, res) => {
 
 // Update a ExperienceItem by ID
 exports.update = async (req, res) => {
-  try {
-    const { item_id } = req.params;
-    const [updated] = await ExperienceItem.update(req.body, {
-      where: { id: item_id }, // Ensure you use the correct column name
-    });
+    try {
+        const { item_id } = req.params;
+        const [updated] = await ExperienceItem.update(req.body, {
+            where: { item_id: item_id }, // Ensure you use the correct column name
+        });
 
     if (!updated) {
       return res

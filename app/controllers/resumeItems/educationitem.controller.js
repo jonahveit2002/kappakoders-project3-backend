@@ -4,14 +4,20 @@ const Education = db.education;
 
 // Create and Save a new educationItem
 exports.create = async (req, res) => {
-  try {
-    const { education_id } = req.body;
-    const { sectionId } = req.params;
+    try {
+        const { education_id } = req.body;
+        const { order } = req.body;
+        const { sectionId } = req.params;
 
-    if (!education_id || !sectionId) {
-      return res
-        .status(400)
-        .send({ message: "education ID and Section ID are required!" });
+        if (!education_id || !sectionId) {
+            return res.status(400).send({ message: "education ID and Section ID are required!" });
+        }
+
+        const educationItem = await EducationItem.create({ education_id, order, section_id: sectionId });
+        res.status(201).send(educationItem);
+    } catch (err) {
+        console.error("Error creating educationItem:", err);
+        res.status(500).send({ message: err.message || "Some error occurred while creating the educationItem." });
     }
 
     const educationItem = await EducationItem.create({
@@ -74,11 +80,11 @@ exports.findOne = async (req, res) => {
 
 // Update a EducationItem by ID
 exports.update = async (req, res) => {
-  try {
-    const { item_id } = req.params;
-    const [updated] = await EducationItem.update(req.body, {
-      where: { id: item_id }, // Ensure you use the correct column name
-    });
+    try {
+        const { item_id } = req.params;
+        const [updated] = await EducationItem.update(req.body, {
+            where: { item_id: item_id }, // Ensure you use the correct column name
+        });
 
     if (!updated) {
       return res

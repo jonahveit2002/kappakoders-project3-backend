@@ -4,14 +4,20 @@ const Project = db.project;
 
 // Create and Save a new projectItem
 exports.create = async (req, res) => {
-  try {
-    const { project_id } = req.body;
-    const { sectionId } = req.params;
+    try {
+        const { project_id } = req.body;
+        const { order } = req.body;
+        const { sectionId } = req.params;
 
-    if (!project_id || !sectionId) {
-      return res
-        .status(400)
-        .send({ message: "project ID and Section ID are required!" });
+        if (!project_id || !sectionId) {
+            return res.status(400).send({ message: "project ID and Section ID are required!" });
+        }
+
+        const projectItem = await ProjectItem.create({ project_id, order, section_id: sectionId });
+        res.status(201).send(projectItem);
+    } catch (err) {
+        console.error("Error creating projectItem:", err);
+        res.status(500).send({ message: err.message || "Some error occurred while creating the projectItem." });
     }
 
     const projectItem = await ProjectItem.create({
@@ -73,11 +79,11 @@ exports.findOne = async (req, res) => {
 
 // Update a ProjectItem by ID
 exports.update = async (req, res) => {
-  try {
-    const { item_id } = req.params;
-    const [updated] = await ProjectItem.update(req.body, {
-      where: { id: item_id }, // Ensure you use the correct column name
-    });
+    try {
+        const { item_id } = req.params;
+        const [updated] = await ProjectItem.update(req.body, {
+            where: { item_id: item_id }, // Ensure you use the correct column name
+        });
 
     if (!updated) {
       return res
