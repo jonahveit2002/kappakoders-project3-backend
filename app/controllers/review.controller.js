@@ -67,7 +67,7 @@ exports.startReview = async (req, res) => {
   try {
     // Check if a review is already in progress
     const existingReview = await Review.findOne({
-      where: { status: "in-review" },
+      where: { status: "in-review", resumeId: resumeId },
     });
     if (existingReview) {
       return res.send({
