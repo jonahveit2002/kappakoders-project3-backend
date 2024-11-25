@@ -59,47 +59,32 @@ exports.login = async (req, res) => {
 
   console.log(lastName);
 
-  let user = {};
   let session = {};
-
-  const chosenUser = await User.findOne({
-    where: {
-      email: email,
-    },
-    include: [
-      {
-        model: db.userRole,
-        as: "userRole",
-        required: false,
-        include: [
-          {
-            model: db.role,
-            as: "role",
-            required: true
-          }
-        ],
+  let user = {};
+  
+  try {
+    const existingUser = await User.findOne({
+      where: {
+        email: email,
       },
-    ]
-
-  })
-    .then((data) => {
-      if (data != null) {
-        user = data.dataValues;
-
-      } else {
-        // create a new User and save to database
-        user = {
-          fName: firstName,
-          lName: lastName,
-          email: email,
-        };
-      }
     })
-    .catch((err) => {
-      console.log("Error: ", err)
 
-      res.status(500).send({ message: err.message });
-    });
+    if (existingUser != null) {
+      user = existingUser.dataValues;
+  
+    } else {
+      // create a new User and save to database
+      user = {
+        fName: firstName,
+        lName: lastName,
+        email: email,
+      };
+    }
+  } catch (err) {
+    console.log("Error: ", err)
+
+    res.status(500).send({ message: err.message });
+  }
 
   // this lets us get the user id
   if (user.id === undefined) {
