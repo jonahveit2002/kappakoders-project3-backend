@@ -9,6 +9,12 @@ module.exports = (app) => {
     professionalSummary.getAllForUser
   );
 
+  router.get(
+    "/professionalSummary/resume/:resumeId",
+    [authenticate],
+    professionalSummary.getProfessionalSummaryForResume
+  );
+
   router.post(
     "/professionalSummary/",
     [authenticate],

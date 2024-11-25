@@ -1,5 +1,6 @@
 const db = require("../models");
 const ResumeSection = db.resumesection;
+const Comment = db.comment;
 const utils = require("./utils/utils.js");
 
 exports.getAllForResume = async (req, res) => {
@@ -7,18 +8,48 @@ exports.getAllForResume = async (req, res) => {
   console.log("I got here");
 
   try {
-    const data = await ResumeSection.findAll({ where: { resumeId:  req.params.resumeId} });
+    const data = await ResumeSection.findAll({
+      where: { resumeId: req.params.resumeId },
+      include: { model: Comment, as: "comments" },
+    });
     res.send(data);
   } catch (err) {
     res.status(500).send({
-      message: err.message || `An error occurred while retrieving resume sections for userId: ${userId}`,
+      message:
+        err.message ||
+        `An error occurred while retrieving resume sections for userId: ${userId}`,
+    });
+  }
+};
+
+exports.getAllForResumeWithCommentsForReview = async (req, res) => {
+  const userId = await utils.getUserId(req);
+
+  try {
+    const data = await ResumeSection.findAll({
+      where: { resumeId: req.params.resumeId },
+      include: {
+        model: Comment,
+        as: "comments",
+        required: false,
+        where: { reviewId: req.params.reviewId },
+      },
+    });
+    res.send(data);
+  } catch (err) {
+    res.status(500).send({
+      message:
+        err.message ||
+        `An error occurred while retrieving resume sections for userId: ${userId}`,
     });
   }
 };
 
 exports.getForId = async (req, res) => {
   try {
-    const data = await ResumeSection.findOne({ where: { section_id: req.params.sectionId } });
+    const data = await ResumeSection.findOne({
+      where: { section_id: req.params.sectionId },
+    });
     if (data) {
       res.send(data);
     } else {
@@ -28,7 +59,8 @@ exports.getForId = async (req, res) => {
     }
   } catch (err) {
     res.status(500).send({
-      message: err.message || `An error occurred while retrieving the resume section.`,
+      message:
+        err.message || `An error occurred while retrieving the resume section.`,
     });
   }
 };
@@ -58,7 +90,8 @@ exports.create = async (req, res) => {
     res.send(data);
   } catch (err) {
     res.status(500).send({
-      message: err.message || `An error occurred while creating the resume section.`,
+      message:
+        err.message || `An error occurred while creating the resume section.`,
     });
   }
 };
@@ -81,7 +114,9 @@ exports.update = async (req, res) => {
   };
 
   try {
-    const [updatedRows] = await ResumeSection.update(resumeSection, { where: { section_id: req.params.sectionId } });
+    const [updatedRows] = await ResumeSection.update(resumeSection, {
+      where: { section_id: req.params.sectionId },
+    });
     if (updatedRows > 0) {
       res.send({
         message: `Successfully updated resume section with id ${req.params.sectionId}!`,
@@ -93,14 +128,18 @@ exports.update = async (req, res) => {
     }
   } catch (err) {
     res.status(500).send({
-      message: err.message || `An error occurred while trying to update the resume section with id ${req.params.id}.`,
+      message:
+        err.message ||
+        `An error occurred while trying to update the resume section with id ${req.params.id}.`,
     });
   }
 };
 
 exports.delete = async (req, res) => {
   try {
-    const deletedRows = await ResumeSection.destroy({ where: { section_id: req.params.section_id } });
+    const deletedRows = await ResumeSection.destroy({
+      where: { section_id: req.params.section_id },
+    });
     if (deletedRows === 1) {
       res.send({ message: "Resume section deleted successfully!" });
     } else {
@@ -110,7 +149,9 @@ exports.delete = async (req, res) => {
     }
   } catch (err) {
     res.status(500).send({
-      message: err.message || `An error occurred while trying to delete the resume section with id ${req.params.section_id}.`,
+      message:
+        err.message ||
+        `An error occurred while trying to delete the resume section with id ${req.params.section_id}.`,
     });
   }
 };

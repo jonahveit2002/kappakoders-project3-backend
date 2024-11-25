@@ -6,9 +6,13 @@ module.exports = (app) => {
   } = require("../authorization/authorization.js");
   var router = require("express").Router();
 
-  router.get("/resume/:resumeId/review", [authenticate], review.getAll);
+  router.get("/admin/resume/:resumeId/review", [authenticate], review.getAll);
 
-  router.get("/resume/review/:id", [authenticate, isAdmin], review.getForId);
+  router.get(
+    "/admin/resume/review/:id",
+    [authenticate, isAdmin],
+    review.getForId
+  );
 
   router.post(
     "/resume/:resumeId/review",
@@ -16,9 +20,17 @@ module.exports = (app) => {
     review.create
   );
 
-  router.put("/resume/review/:id", [authenticate, isAdmin], review.update);
+  router.put(
+    "/admin/resume/review/:id",
+    [authenticate, isAdmin],
+    review.update
+  );
 
-  router.delete("/resume/review/:id", [authenticate, isAdmin], review.destroy);
+  router.delete(
+    "/admin/resume/review/:id",
+    [authenticate, isAdmin],
+    review.destroy
+  );
 
-  app.use("/resume-t1/student", router);
+  app.use("/resume-t1", router);
 };
