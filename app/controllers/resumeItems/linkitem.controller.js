@@ -30,9 +30,6 @@ exports.create = async (req, res) => {
           err.message || "Some error occurred while creating the linkItem.",
       });
   }
-
-  const linkItem = await LinkItem.create({ link_id, section_id: sectionId });
-  res.status(201).send(linkItem);
 };
 
 // Retrieve all linkItems for a specific section

@@ -31,12 +31,6 @@ exports.create = async (req, res) => {
           "Some error occurred while creating the educationItem.",
       });
   }
-
-  const educationItem = await EducationItem.create({
-    education_id,
-    section_id: sectionId,
-  });
-  res.status(201).send(educationItem);
 };
 
 // Retrieve all educationItems for a specific section

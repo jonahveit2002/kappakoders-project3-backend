@@ -21,6 +21,7 @@ exports.create = async (req, res) => {
       section_id: sectionId,
     });
     res.status(201).send(projectItem);
+    
   } catch (err) {
     console.error("Error creating projectItem:", err);
     res
@@ -30,12 +31,6 @@ exports.create = async (req, res) => {
           err.message || "Some error occurred while creating the projectItem.",
       });
   }
-
-  const projectItem = await ProjectItem.create({
-    project_id,
-    section_id: sectionId,
-  });
-  res.status(201).send(projectItem);
 };
 
 // Retrieve all projectItems for a specific section

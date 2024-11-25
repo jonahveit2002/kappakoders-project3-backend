@@ -32,11 +32,6 @@ exports.create = async (req, res) => {
       });
   }
 
-  const experienceItem = await ExperienceItem.create({
-    experience_id,
-    section_id: sectionId,
-  });
-  res.status(201).send(experienceItem);
 };
 
 // Retrieve all experienceItems for a specific section

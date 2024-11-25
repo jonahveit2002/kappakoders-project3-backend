@@ -31,11 +31,6 @@ exports.create = async (req, res) => {
       });
   }
 
-  const awardItem = await AwardItem.create({
-    award_id,
-    section_id: sectionId,
-  });
-  res.status(201).send(awardItem);
 };
 
 // Retrieve all awardItems for a specific section
