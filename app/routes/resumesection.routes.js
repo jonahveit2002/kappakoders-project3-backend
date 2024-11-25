@@ -1,28 +1,33 @@
 module.exports = (app) => {
   const resumeSection = require("../controllers/resumesection.controller.js");
-  const { authenticate } = require("../authorization/authorization.js");
+  const {
+    authenticate,
+    isAdmin,
+  } = require("../authorization/authorization.js");
   var router = require("express").Router();
 
   // Get all resume sections for a specific resume
   router.get(
     "/:resumeId/resumeSection",
     [authenticate],
-    resumeSection.getAllForResume 
+    resumeSection.getAllForResume
+  );
+
+  router.get(
+    "/:resumeId/resumeSection/comment/:reviewId",
+    [authenticate, isAdmin],
+    resumeSection.getAllForResumeWithCommentsForReview
   );
 
   // Get a specific resume section by ID
   router.get(
-    "/:resumeId/resumeSection/:sectionId", 
-    [authenticate], 
+    "/:resumeId/resumeSection/:sectionId",
+    [authenticate],
     resumeSection.getForId
   );
 
   // Create a new resume section for a specific resume
-  router.post(
-    "/:resumeId/resumeSection",
-    [authenticate],
-    resumeSection.create
-  );
+  router.post("/:resumeId/resumeSection", [authenticate], resumeSection.create);
 
   // Update a specific resume section by ID
   router.put(
@@ -32,7 +37,11 @@ module.exports = (app) => {
   );
 
   // Delete a specific resume section by ID
-  router.delete("/:resumeId/resumeSection/:section_id", [authenticate], resumeSection.delete);
+  router.delete(
+    "/:resumeId/resumeSection/:section_id",
+    [authenticate],
+    resumeSection.delete
+  );
 
   app.use("/resume-t1/student/resume", router);
 };

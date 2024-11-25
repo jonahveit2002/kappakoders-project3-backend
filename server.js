@@ -7,7 +7,6 @@ const app = express();
 
 const db = require("./app/models");
 
-
 db.sequelize.sync();
 
 var corsOptions = {
@@ -52,12 +51,6 @@ require("./app/routes/resumeItems/awardItem.routes.js")(app);
 require("./app/routes/resumeItems/linkItem.routes.js")(app);
 require("./app/routes/resumeItems/professionalSummaryItem.routes.js")(app);
 require("./app/routes/resumeItems/projectitem.routes.js")(app);
-
-
-
-
-
-
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3011;
