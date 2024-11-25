@@ -135,7 +135,7 @@ exports.login = async (req, res) => {
   })
     .then((data) => {
       data.dataValues.userRole.forEach((userRole) => {
-        if (userRole.dataValues.role.dataValues.type == "Admin") {
+        if (userRole.dataValues.role.dataValues.type == "admin") {
           user.isAdmin = true;
         }
       });
