@@ -5,9 +5,12 @@ const Project = db.project;
 // Create and Save a new projectItem
 exports.create = async (req, res) => {
   try {
+    console.log("Project: ", req.body);
     const { project_id } = req.body;
     const { order } = req.body;
     const { sectionId } = req.params;
+
+    console.log(project_id, order, sectionId);
 
     if (!project_id || !sectionId) {
       return res
@@ -24,12 +27,10 @@ exports.create = async (req, res) => {
     
   } catch (err) {
     console.error("Error creating projectItem:", err);
-    res
-      .status(500)
-      .send({
-        message:
-          err.message || "Some error occurred while creating the projectItem.",
-      });
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while creating the projectItem.",
+    });
   }
 };
 

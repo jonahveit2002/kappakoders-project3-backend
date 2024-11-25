@@ -23,13 +23,10 @@ exports.create = async (req, res) => {
     res.status(201).send(educationItem);
   } catch (err) {
     console.error("Error creating educationItem:", err);
-    res
-      .status(500)
-      .send({
-        message:
-          err.message ||
-          "Some error occurred while creating the educationItem.",
-      });
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while creating the educationItem.",
+    });
   }
 };
 

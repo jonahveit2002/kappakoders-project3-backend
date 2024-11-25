@@ -55,7 +55,7 @@ exports.getForId = async (req, res) => {
     });
 };
 
-exports.create = async (req, res) => {
+exports.startReview = async (req, res) => {
   const resumeId = req.params.resumeId;
 
   const review = {
@@ -64,15 +64,27 @@ exports.create = async (req, res) => {
     status: "in-review",
   };
 
-  await Review.create(review)
-    .then((data) => res.send(data))
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message ||
-          "Something went wrong while trying to create a review!",
-      });
+  try {
+    // Check if a review is already in progress
+    const existingReview = await Review.findOne({
+      where: { status: "in-review" },
     });
+    if (existingReview) {
+      return res.send({
+        message: "There is already a review in progress for this resume.",
+      });
+    }
+
+    // Create a new review
+    const createdReview = await Review.create(review);
+    return res.send(createdReview);
+  } catch (err) {
+    // Handle errors for both queries
+    return res.status(500).send({
+      message:
+        err.message || "Something went wrong while trying to create a review!",
+    });
+  }
 };
 
 exports.update = async (req, res) => {
