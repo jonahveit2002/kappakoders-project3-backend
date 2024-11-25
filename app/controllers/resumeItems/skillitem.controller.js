@@ -30,12 +30,6 @@ exports.create = async (req, res) => {
           err.message || "Some error occurred while creating the SkillItem.",
       });
   }
-
-  const skillItem = await SkillItem.create({
-    skill_id,
-    section_id: sectionId,
-  });
-  res.status(201).send(skillItem);
 };
 
 // Retrieve all SkillItems for a specific section
