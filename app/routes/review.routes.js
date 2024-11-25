@@ -6,7 +6,7 @@ module.exports = (app) => {
   } = require("../authorization/authorization.js");
   var router = require("express").Router();
 
-  router.get("/admin/resume/:resumeId/review", [authenticate], review.getAll);
+  router.get("/student/resume/:resumeId/review", [authenticate], review.getAll);
 
   router.get(
     "/admin/resume/review/:id",
@@ -15,7 +15,7 @@ module.exports = (app) => {
   );
 
   router.post(
-    "/resume/:resumeId/review",
+    "/admin/resume/:resumeId/review",
     [authenticate, isAdmin],
     review.create
   );

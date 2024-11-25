@@ -4,34 +4,38 @@ const Award = db.award;
 
 // Create and Save a new awardItem
 exports.create = async (req, res) => {
-    try {
-        const { award_id } = req.body;
-        const { order } = req.body;
-        const { sectionId } = req.params;
+  try {
+    const { award_id } = req.body;
+    const { order } = req.body;
+    const { sectionId } = req.params;
 
-        if (!award_id || !sectionId) {
-            return res.status(400).send({ message: "award ID and Section ID are required!" });
-        }
-
-        const awardItem = await AwardItem.create({ award_id, order, section_id: sectionId });
-        res.status(201).send(awardItem);
-    } catch (err) {
-        console.error("Error creating awardItem:", err);
-        res.status(500).send({ message: err.message || "Some error occurred while creating the awardItem." });
+    if (!award_id || !sectionId) {
+      return res
+        .status(400)
+        .send({ message: "award ID and Section ID are required!" });
     }
 
     const awardItem = await AwardItem.create({
       award_id,
+      order,
       section_id: sectionId,
     });
     res.status(201).send(awardItem);
   } catch (err) {
     console.error("Error creating awardItem:", err);
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while creating the awardItem.",
-    });
+    res
+      .status(500)
+      .send({
+        message:
+          err.message || "Some error occurred while creating the awardItem.",
+      });
   }
+
+  const awardItem = await AwardItem.create({
+    award_id,
+    section_id: sectionId,
+  });
+  res.status(201).send(awardItem);
 };
 
 // Retrieve all awardItems for a specific section
@@ -79,11 +83,11 @@ exports.findOne = async (req, res) => {
 
 // Update a AwardItem by ID
 exports.update = async (req, res) => {
-    try {
-        const { item_id } = req.params;
-        const [updated] = await AwardItem.update(req.body, {
-            where: { item_id: item_id }, // Ensure you use the correct column name
-        });
+  try {
+    const { item_id } = req.params;
+    const [updated] = await AwardItem.update(req.body, {
+      where: { item_id: item_id }, // Ensure you use the correct column name
+    });
 
     if (!updated) {
       return res
