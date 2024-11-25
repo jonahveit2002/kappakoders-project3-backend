@@ -71,7 +71,7 @@ isAdmin = async (req, res, next) => {
           .then((data) => {
             roles = data;
             for (let i = 0; i < roles.length; i++) {
-              if (roles[i].role.type == "Admin") {
+              if (roles[i].role.type == "admin") {
                 next();
                 return;
               }
