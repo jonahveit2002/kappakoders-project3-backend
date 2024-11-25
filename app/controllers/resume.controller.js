@@ -2,7 +2,10 @@ const db = require("../models");
 const Resume = db.resume;
 const ResumeSection = db.resumesection;
 const Template = db.template;
+const User = db.user;
+const Review = db.review;
 const utils = require("./utils/utils.js");
+const Op = db.Sequelize.Op;
 
 exports.create = async (req, res) => {
   const validation = validateResume(req.body);
@@ -141,6 +144,59 @@ exports.getAllForUser = async (req, res) => {
           `An error occurred while trying to retrieve resumes for user with id ${userId}`,
       });
     });
+};
+
+exports.getAllForReview = async (req, res) => {
+  // Extract search query from request query parameters
+  const search = req.query.search || '';
+
+  // Split search into words for multi-word searches
+  const searchTerms = search.split(' ').filter(term => term.trim() !== '');
+
+  try {
+    const data = await Resume.findAll({
+      include: [
+        { 
+          model: Review, 
+          as: "review",
+          where: { status: "In-Review" }
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['fName', 'lName'],
+          where: search 
+            ? {
+                [Op.or]: [
+                  // Match full name concatenation
+                  {
+                    [Op.and]: searchTerms.map(term => ({
+                      [Op.or]: [
+                        { fName: { [Op.like]: `%${term}%` } },
+                        { lName: { [Op.like]: `%${term}%` } }
+                      ]
+                    }))
+                  },
+                  // Allow for partial first/last name match
+                  { fName: { [Op.like]: `%${search}%` } },
+                  { lName: { [Op.like]: `%${search}%` } }
+                ]
+              }
+            : undefined // Skip filter if no search query
+        }
+      ]
+    });
+
+    // Return the data
+    res.send(data);
+
+  } catch (err) {
+    res.status(500).send({
+      message:
+        err.message ||
+          `An error occurred while trying to retrieve resumes`,
+    });
+  }
 };
 
 exports.getSectionsForResume = async (req, res) => {

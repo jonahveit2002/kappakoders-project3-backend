@@ -1,17 +1,19 @@
 module.exports = (app) => {
   const resume = require("../controllers/resume.controller.js");
-  const { authenticate } = require("../authorization/authorization.js");
+  const { authenticate, isAdmin } = require("../authorization/authorization.js");
   var router = require("express").Router();
 
-  router.get("/resume/", [authenticate], resume.getAllForUser);
+  router.get("/student/resume/", [authenticate], resume.getAllForUser);
 
-  router.get("/resume/:id", [authenticate], resume.getForId);
+  router.get("/admin/resume/", [authenticate, isAdmin], resume.getAllForReview);
+  
+  router.get("/student/resume/:id", [authenticate], resume.getForId);
 
-  router.post("/resume/", [authenticate], resume.create);
+  router.post("/student/resume/", [authenticate], resume.create);
 
-  router.put("/resume/:id", [authenticate], resume.update);
+  router.put("/student/resume/:id", [authenticate], resume.update);
 
-  router.delete("/resume/:id", [authenticate], resume.delete);
+  router.delete("/student/resume/:id", [authenticate], resume.delete);
 
-  app.use("/resume-t1/student", router);
+  app.use("/resume-t1/", router);
 };
