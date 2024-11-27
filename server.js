@@ -7,7 +7,16 @@ const app = express();
 
 const db = require("./app/models");
 
-db.sequelize.sync();
+var alterDB = false;
+
+/* This allows you to run the "alter" command from the command line*/
+const args = process.argv.slice(2);
+if (args[0] === "alter") {
+  console.log("NOTICE: Altering Database Tables");
+  alterDB = true;
+}
+
+db.sequelize.sync({alter: alterDB});
 
 var corsOptions = {
   origin: "http://localhost:8081",

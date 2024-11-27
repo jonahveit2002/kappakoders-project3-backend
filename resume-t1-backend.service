@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=ubuntu
 WorkingDirectory=/home/ubuntu/nodeapps/2024/project3/t1/resume-t1-backend/
-ExecStart=/usr/bin/npm run start
+ExecStart=/usr/bin/npm run start alter
 Restart=on-failure
  
 [Install]
