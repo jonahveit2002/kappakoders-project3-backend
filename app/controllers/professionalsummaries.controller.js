@@ -17,6 +17,20 @@ exports.getAllForUser = async (req, res) => {
     });
 };
 
+exports.getForId = async (req, res) => {
+  await ProfessionalSummary.findByPk(req.params.id)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          `Some error ocurred while retrieving Professional Summary with id:${id}`,
+      });
+    });
+};
+
 exports.getProfessionalSummaryForResume = async (req, res) => {
   await ProfessionalSummary.findOne({
     where: { resumeId: req.params.resumeId },

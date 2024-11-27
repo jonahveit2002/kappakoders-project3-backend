@@ -23,15 +23,11 @@ exports.create = async (req, res) => {
     res.status(201).send(experienceItem);
   } catch (err) {
     console.error("Error creating experienceItem:", err);
-    res
-      .status(500)
-      .send({
-        message:
-          err.message ||
-          "Some error occurred while creating the experienceItem.",
-      });
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while creating the experienceItem.",
+    });
   }
-
 };
 
 // Retrieve all experienceItems for a specific section

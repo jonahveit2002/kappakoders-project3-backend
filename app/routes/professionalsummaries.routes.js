@@ -10,6 +10,12 @@ module.exports = (app) => {
   );
 
   router.get(
+    "/professionalSummary/:id",
+    [authenticate],
+    professionalSummary.getForId
+  );
+
+  router.get(
     "/professionalSummary/resume/:resumeId",
     [authenticate],
     professionalSummary.getProfessionalSummaryForResume

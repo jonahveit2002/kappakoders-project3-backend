@@ -15,9 +15,9 @@ module.exports = (app) => {
   );
 
   router.post(
-    "/admin/resume/:resumeId/review",
-    [authenticate, isAdmin],
-    review.create
+    "/student/resume/:resumeId/review",
+    [authenticate],
+    review.startReview
   );
 
   router.put(

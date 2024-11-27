@@ -23,12 +23,10 @@ exports.create = async (req, res) => {
     res.status(201).send(skillItem);
   } catch (err) {
     console.error("Error creating SkillItem:", err);
-    res
-      .status(500)
-      .send({
-        message:
-          err.message || "Some error occurred while creating the SkillItem.",
-      });
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while creating the SkillItem.",
+    });
   }
 };
 
