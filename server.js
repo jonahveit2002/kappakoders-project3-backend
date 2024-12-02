@@ -38,6 +38,7 @@ app.get("/", (req, res) => {
 
 require("./app/routes/auth.routes.js")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/userProfile.routes")(app);
 require("./app/routes/userRole.routes.js")(app);
 require("./app/routes/link.routes.js")(app);
 require("./app/routes/education.routes.js")(app);
