@@ -7,7 +7,7 @@
     "test": "jest --",
     "start": "node server.js",
     "bundle": "mkdir deploy && cp -r app server.js package.json package-lock.json resume-t1-backend.service .env deploy",
-    "dev": "nodemon server.js"
+    "dev" : "nodemon server.js"
   },
   "keywords": [
     "node.js",
@@ -27,7 +27,7 @@
     "mariadb": "^3.3.2",
     "mysql2": "^2.3.3",
     "parser": "^0.1.4",
-    "sequelize": "^6.37.5",
+    "sequelize": "^6.19.0",
     "supertest": "^6.3.3"
   }
 }
