@@ -22,7 +22,6 @@ exports.getUserProfile = async (req, res) => {
 
 exports.createUserProfile = async (req, res) => {
   const { userId, fName, lName, phoneNum, profilePhoto } = req.body;
-  console.log("New Profile");
 
   try {
     // Check if the profile already exists
@@ -40,11 +39,6 @@ exports.createUserProfile = async (req, res) => {
       ...(phoneNum && { phoneNum }), // Add phoneNum if it exists
       ...(profilePhoto && { profilePhoto }), // Add photoUrl if it exists
     };
-
-    console.log("0000000000000000000000000");
-    console.log(newProfileData);
-    console.log("0000000000000000000000000");
-
 
     const newProfile = await UserProfile.create(newProfileData);
 
