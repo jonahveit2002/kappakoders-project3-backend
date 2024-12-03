@@ -48,6 +48,7 @@ exports.create = async (req, res) => {
     position_title: req.body.position_title,
     date_start: req.body.date_start,
     date_end: req.body.date_end,
+    description: req.body.description,
     userId: userId,
   };
 
@@ -80,6 +81,7 @@ exports.update = async (req, res) => {
     position_title: req.body.position_title,
     date_start: req.body.date_start,
     date_end: req.body.date_end,
+    description: req.body.description,
   };
 
   await Experience.update(experience, { where: { id: req.params.id } })

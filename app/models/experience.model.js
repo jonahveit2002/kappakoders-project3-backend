@@ -21,6 +21,9 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DATEONLY,
       allowNull: false,
     },
+    description: {
+      type: Sequelize.STRING,
+    },
   });
 
   return Experience;
