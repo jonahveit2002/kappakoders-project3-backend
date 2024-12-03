@@ -59,7 +59,7 @@ isAdmin = async (req, res, next) => {
       if (session.userId != null) {
         await UserRole.findAll({
           where: { userId: session.userId },
-          as: "userrole",
+          as: "userRole",
           include: [
             {
               model: Role,
